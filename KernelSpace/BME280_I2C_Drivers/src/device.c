@@ -39,43 +39,32 @@ static int __init ModuleBmp280SensorNodeInit(void);
 static void __exit ModuleCharacterDeviceExit(void);
 
 /* Defines for device identification */ 
-#define I2C_BUS_AVAILABLE	          1	         	        /* The I2C Bus available on the raspberry */
-#define SLAVE_DEVICE_NAME	          "bmp280"	          /* Device and Driver Name */
-#define BMP280_SLAVE_ADDRESS	      0x76		            /* BMP280 I2C address */
-
-static const struct i2c_device_id id[] =
-{
-  {
-    .name = SLAVE_DEVICE_NAME,
-    .driver_data = 0
-  }, 
-  {
-    .name = "",
-    .driver_data = 0
-  }
-};
+#define I2C_BUS_AVAILABLE         1             /* The I2C Bus available on the raspberry */
+#define SLAVE_DEVICE_NAME         "bmp280"      /* Device and Driver Name */
+#define BMP280_SLAVE_ADDRESS      0x76          /* BMP280 I2C address */
 
 static struct i2c_driver driver =
 {
-	.driver =
+  .driver =
   {
-		.name = SLAVE_DEVICE_NAME,
-		.owner = THIS_MODULE
-	}
+    .name = SLAVE_DEVICE_NAME,
+    .owner = THIS_MODULE
+  }
 };
 
 static struct i2c_board_info board_info =
 {
-	.type = SLAVE_DEVICE_NAME,
+  .type = SLAVE_DEVICE_NAME,
   .addr = BMP280_SLAVE_ADDRESS
 };
 
-static const struct file_operations bmp_fops = {
-    .owner   = THIS_MODULE,
-    .open    = open,
-    .release = release,
-    .read    = read,
-    .write   = write,
+static const struct file_operations bmp_fops =
+{
+  .owner   = THIS_MODULE,
+  .open    = open,
+  .release = release,
+  .read    = read,
+  .write   = write,
 };
 
 // device number for this module
@@ -147,23 +136,29 @@ static int __init ModuleBmp280SensorNodeInit(void)
   
   if((adap = i2c_get_adapter(I2C_BUS_AVAILABLE)) == NULL)
   {
-    printk(KERN_ERR "%s() unable to get i2c adaptor...\n", __func__);
+    printk(KERN_ERR "%s() unable to get i2c adaptor\n", __func__);
     ret = -1;
     goto err_device;
   }
 
   if((client = i2c_new_client_device(adap, &board_info)) == NULL)
   {
-    printk(KERN_ERR "%s() unable to get i2c device...\n", __func__);
+    printk(KERN_ERR "%s() unable to get i2c device\n", __func__);
     ret = -1;
     goto err_device;
   }
 
+  if((ret = i2c_add_driver(&driver)) == -1)
+  {
+    printk(KERN_ERR "%s() unable to add driver", __func__);
+    goto err_driver;
+  }
 
+  prink(KERN_INFO "%s i2c drivers added successfully\n", __func__);
 
-
-
-
+  return 0;
+err_driver:
+  i2c_unregister_device(client);
 err_device:
   class_destroy(bmp_class);
 err_class:
