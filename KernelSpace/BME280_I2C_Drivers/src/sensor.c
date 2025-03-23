@@ -16,30 +16,69 @@
  *   - Written for use with the Yocto Project on embedded Linux.
  *   - Designed to be simple and minimalistic for educational purposes.
  */
-
+#include <linux/kernel.h>
+#include <linux/fs.h>
+#include <linux/uaccess.h>
 #include "sensor.h"
 
-// --------------- File operations ---------------
+typedef struct
+{
+  int32_t v1;
+  int32_t v2;
+  int32_t v3;
+} calibration_t;
+
+static calibration_t calibration;
+
+void init(i2c_client *client)
+{
+  if(NULL == client)
+  {
+    printk(KERN_ERR "%s() invalid arguments to initialize sensor\n", __func__);
+    return;
+  }
+
+  // read sensor identifier
+  uint8_t id = i2c_smbus_read_byte_data(client, 0xD0);
+  printk(KERN_INFO "%s() sensor is attached with id %d\n", __func__, id);
+
+  // read sensor calibration values
+  calibration.v1 = i2c_smbus_read_word_data(client, 0x88);
+  calibration.v2 = i2c_smbus_read_word_data(client, 0x8A);
+  calibration.v3 = i2c_smbus_read_word_data(client, 0x8C);
+
+  calibration.v2 -= (calibration.v2 > 0x7FFF) ? 0x10000 : 0;
+  calibration.v2 -= (calibration.v3 > 0x7FFF) ? 0x10000 : 0;
+}
+
 int open(struct inode *inode, struct file *file)
 {
-    pr_info("bmp_device opened\n");
-    return 0;
+  pr_info("bmp: open\n");
+  return 0;
 }
 
 int release(struct inode *inode, struct file *file)
 {
-    pr_info("bmp_device closed\n");
-    return 0;
+  pr_info("bmp: release\n");
+  return 0;
 }
 
 ssize_t read(struct file *file, char __user *buf, size_t len, loff_t *offset)
 {
-    pr_info("bmp_device read\n");
-    return 0;
+  pr_info("bmp: read\n");
+  return 0;
 }
 
 ssize_t write(struct file *file, const char __user *buf, size_t len, loff_t *offset)
 {
-    pr_info("bmp_device write\n");
-    return len;
+  pr_info("bmp: write\n");
+  return len;
 }
+
+const struct file_operations bmp_fops = {
+  .owner   = THIS_MODULE,
+  .open    = open,
+  .release = release,
+  .read    = read,
+  .write   = write,
+};

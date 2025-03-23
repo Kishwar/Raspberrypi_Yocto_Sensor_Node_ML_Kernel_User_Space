@@ -58,15 +58,6 @@ static struct i2c_board_info board_info =
   .addr = BMP280_SLAVE_ADDRESS
 };
 
-static const struct file_operations bmp_fops =
-{
-  .owner   = THIS_MODULE,
-  .open    = open,
-  .release = release,
-  .read    = read,
-  .write   = write,
-};
-
 // device number for this module
 dev_t device_number;
 
@@ -90,7 +81,7 @@ module_exit(ModuleBmp280SensorNodeExit);
  */
 static int __init ModuleBmp280SensorNodeInit(void)
 {
-  int ret = 0;
+  int ret = -EPERM;
   printk(KERN_INFO "%s()\n", __func__);
 
   // 1. dynamically allocate a device number (creates device number)
@@ -137,14 +128,14 @@ static int __init ModuleBmp280SensorNodeInit(void)
   if((adap = i2c_get_adapter(I2C_BUS_AVAILABLE)) == NULL)
   {
     printk(KERN_ERR "%s() unable to get i2c adaptor\n", __func__);
-    ret = -1;
+    ret = -EPERM;
     goto err_device;
   }
 
   if((client = i2c_new_client_device(adap, &board_info)) == NULL)
   {
     printk(KERN_ERR "%s() unable to get i2c device\n", __func__);
-    ret = -1;
+    ret = -EPERM;
     goto err_device;
   }
 
@@ -155,6 +146,8 @@ static int __init ModuleBmp280SensorNodeInit(void)
   }
 
   prink(KERN_INFO "%s i2c drivers added successfully\n", __func__);
+
+  init_sensor(client);
 
   return 0;
 err_driver:
