@@ -53,26 +53,33 @@ void init(i2c_client *client)
 
 int open(struct inode *inode, struct file *file)
 {
-  pr_info("bmp: open\n");
+  printk(KERN_INFO "%s() executing open operation - nothing to do\n", __func__);
   return 0;
 }
 
 int release(struct inode *inode, struct file *file)
 {
-  pr_info("bmp: release\n");
+  printk(KERN_INFO "%s() executing release operation - nothing to do\n", __func__);
   return 0;
 }
 
 ssize_t read(struct file *file, char __user *buf, size_t len, loff_t *offset)
 {
-  pr_info("bmp: read\n");
+  if((NULL == buf) || (NULL offset) || (0 == len))
+  {
+    printk(KERN_ERR "%s() invalid arguments received\n", __func__);
+    return -EPERM;
+  }
+
+
+
   return 0;
 }
 
 ssize_t write(struct file *file, const char __user *buf, size_t len, loff_t *offset)
 {
-  pr_info("bmp: write\n");
-  return len;
+  printk(KERN_INFO "%s() executing write operation - return -EPERM\n", __func__);
+  return -EPERM;
 }
 
 const struct file_operations bmp_fops = {
