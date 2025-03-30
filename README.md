@@ -3,7 +3,7 @@ In this project, I will develop following things.
 -  Kernel device drivers for OLED connected with I2C
 -  Kernel device drivers for OLED connected with SPI
 -  Kernel device drivers for BME280 connected with SPI
--  C++ Application (Layered designed with C++17)
+-  User Application (Layered designed with C++17)
     - Read sensor data
     - Write it on Displays
     - Send data to AWS server
