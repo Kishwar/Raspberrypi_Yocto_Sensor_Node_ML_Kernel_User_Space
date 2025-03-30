@@ -5,7 +5,7 @@ In this project, I will develop following things.
 -  Kernel device drivers for BME280 connected with SPI
 -  User Application (Layered designed with C++17)
     - Read sensor data
-    - Write it on Displays
+    - Write it on Displays together with realtime clock
     - Send data to AWS server
     - Run AI Linear regression model on temprature / pressure / humidity (Edge processing)
  
