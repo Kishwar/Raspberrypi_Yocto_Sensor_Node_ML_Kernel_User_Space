@@ -7,7 +7,7 @@ In this project, I will develop following things.
     - Read sensor data
     - Write it on Displays
     - Send data to AWS server
-    - Run AI Linear regression model to guage temprature / pressure / humidity
+    - Run AI Linear regression model on temprature / pressure / humidity (Edge processing)
  
 # Hardware
 ![devshell](RapberryPi_Sensors_OLED_Ethernet.jpeg)
