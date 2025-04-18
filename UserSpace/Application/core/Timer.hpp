@@ -1,7 +1,6 @@
 /******************************************************************************
- *  @file       Queue.hpp
- *  @brief      Implements Queue to send / receive messages from different
- *              services
+ *  @file       Timer.hpp
+ *  @brief      Implements Timer using POSIX APIs
  *
  *  @copyright  Copyright (c) 2025 Kishwar Kumar
  *              All rights reserved.

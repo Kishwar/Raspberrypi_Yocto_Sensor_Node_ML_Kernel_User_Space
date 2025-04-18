@@ -22,6 +22,8 @@
 #include <unistd.h>
 #include <thread>
 
+#include "Timer.hpp"
+
 void timer_callback(union sigval val) {
     std::cout << "Timer callback fired!" << std::endl;
 }
@@ -31,6 +33,10 @@ void thread_task() {
         std::cout << "Thread Task ..." << std::endl;
         sleep(10);
     }
+}
+
+void print_message(const std::string& msg, int count) {
+    std::cout << "[Timer] " << msg << " #" << count << std::endl;
 }
 
 int main() {
@@ -66,6 +72,15 @@ int main() {
     }
 
     t1.join();  // Wait for t1 to finish
+
+
+    std::string message = "Hello from Timer";
+    int value = 1;
+    Timer timer(print_message, 1000, Timer<decltype(print_message), std::string, int>::Type::Periodic, message, value);
+    timer.start();
+    sleep(5);  // Run for 5 seconds
+    timer.stop();
+    std::cout << "Timer stopped.\n";
 
     return 0;
 }
