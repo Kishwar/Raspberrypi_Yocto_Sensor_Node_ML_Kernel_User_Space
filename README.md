@@ -11,3 +11,25 @@ In this project, I will develop following things.
  
 # Hardware
 ![devshell](RapberryPi_Sensors_OLED_Ethernet.jpeg)
+
+# Create SDK to build application for Raspberrypi running yocto
+Add following lines to kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi/conf$ nano local.conf
+```
+PACKAGECONFIG:append:pn-gcc-runtime = " static-libstdc++"
+DISTRO_FEATURES:append = " staticdev"
+SDKIMAGE_FEATURES:append = " staticdev-pkgs"
+```
+
+Run following commands
+```
+kkumar@DESKTOP-NK9HSKR:~/embd_linux$ source poky/oe-init-build-env build_pi
+kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi$ bitbake -c cleansstate gcc-runtime
+kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi$ bitbake gcc-runtime
+kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi$ bitbake core-image-minimal -c populate_sdk
+```
+```
+kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi$ source /opt/poky/4.0.21/environment-setup-cortexa7t2hf-neon-vfpv4-poky-linux-gnueabi
+kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi$ cd tmp/deploy/sdk/
+kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi/tmp/deploy/sdk$ ./poky-glibc-x86_64-core-image-minimal-cortexa7t2hf-neon-vfpv4-raspberrypi3-toolchain-4.0.21.sh
+kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi/tmp/deploy/sdk$ . /opt/poky/4.0.21/environment-setup-cortexa7t2hf-neon-vfpv4-poky-linux-gnueabi
+```
