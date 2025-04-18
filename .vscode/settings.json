@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "fs.h": "c",
+        "iostream": "cpp",
+        "condition_variable": "cpp",
+        "atomic": "cpp"
+    }
+}
