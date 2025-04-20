@@ -39,3 +39,9 @@ kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi/tmp/deploy/sdk$ . /opt/poky/4.0.21/
 kkumar@DESKTOP-NK9HSKR:~/Raspberrypi_Yocto_Sensor_Node_ML_Kernel_User_Space/UserSpace/Application$ source /opt/poky/4.0.21/environment-setup-cortexa7t2hf-neon-vfpv4-poky-linux-gnueabi
 kkumar@DESKTOP-NK9HSKR:~/Raspberrypi_Yocto_Sensor_Node_ML_Kernel_User_Space/UserSpace/Application$ make
 ```
+
+# Build Kernel
+```
+kkumar@DESKTOP-NK9HSKR:~/embd_linux$ source poky/oe-init-build-env build_pi
+kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi$ bitbake virtual/kernel -c devshell
+```
