@@ -33,3 +33,9 @@ kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi$ cd tmp/deploy/sdk/
 kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi/tmp/deploy/sdk$ ./poky-glibc-x86_64-core-image-minimal-cortexa7t2hf-neon-vfpv4-raspberrypi3-toolchain-4.0.21.sh
 kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi/tmp/deploy/sdk$ . /opt/poky/4.0.21/environment-setup-cortexa7t2hf-neon-vfpv4-poky-linux-gnueabi
 ```
+
+# Build Application
+```
+kkumar@DESKTOP-NK9HSKR:~/Raspberrypi_Yocto_Sensor_Node_ML_Kernel_User_Space/UserSpace/Application$ source /opt/poky/4.0.21/environment-setup-cortexa7t2hf-neon-vfpv4-poky-linux-gnueabi
+kkumar@DESKTOP-NK9HSKR:~/Raspberrypi_Yocto_Sensor_Node_ML_Kernel_User_Space/UserSpace/Application$ make
+```

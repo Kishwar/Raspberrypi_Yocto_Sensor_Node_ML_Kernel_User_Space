@@ -19,7 +19,10 @@
  #ifndef _TIMER_HPP_
  #define _TIMER_HPP_
 
-template <typename F, typename... Args>
+#include <cstring>
+#include <cerrno>
+#include <functional>
+
 class Timer {
 public:
     enum class Type {
@@ -27,23 +30,25 @@ public:
         Periodic
     };
 
-    Timer(T&& fn, int milliseconds, Type type, Args&& args)
-        : callback_(std::forward<T>(fn)),
-          args_(std::tuple(std::forward<Args>(args)...)),
-          interval_ms_(milliseconds),
+    template <typename T, typename... Args>
+    Timer(T&& callback, int milliseconds, Type type, Args&&... args)
+        : interval_ms_(milliseconds),
           type_(type),
           active_(false)
     {
+        callback_ = [cb = std::forward<T>(callback),
+                     tup = std::make_tuple(std::forward<Args>(args)...)]() mutable {
+                        std::apply(cb, tup);
+                     };
         memset(&sev_, 0, sizeof(sev_));
         sev_.sigev_notify = SIGEV_THREAD;
-        sev_.sigev_notify_function = [] (union sigval sv ){
-                                        auto* self = static_cast<Timer*>(sv.sival_ptr);
-                                        if (self) {
-                                            self->invoke();
-                                        }
-                                     };
+        sev_.sigev_notify_function = [](union sigval sv) {
+                                                             Timer* timer = static_cast<Timer*>(sv.sival_ptr);
+                                                             if (timer && timer->callback_) {
+                                                                timer->callback_(); // call the stored lambda
+                                                            }
+                                                         };
         sev_.sigev_value.sival_ptr = this;
-
         if(timer_create(CLOCK_REALTIME, &sev_, &timer_id_) != 0) {
             throw std::runtime_error("Failed to create timer: " + std::string(std::strerror(errno)));
         }
@@ -83,8 +88,7 @@ public:
     }
 
 private:
-    T callback_;
-    std::tuple<Args...> args_;
+    std::function<void()> callback_;
     timer_t timer_id_;
     struct sigevent sev_;
     struct itimerspec its_;

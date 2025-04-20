@@ -24,6 +24,7 @@
 
 #include "Timer.hpp"
 
+#if 0
 void timer_callback(union sigval val) {
     std::cout << "Timer callback fired!" << std::endl;
 }
@@ -34,12 +35,18 @@ void thread_task() {
         sleep(10);
     }
 }
+#endif
 
 void print_message(const std::string& msg, int count) {
     std::cout << "[Timer] " << msg << " #" << count << std::endl;
 }
 
+void print_bool_message(const std::string& msg, int count, bool print) {
+    std::cout << "[Timer] " << msg << " #" << count << " bool " << print << std::endl;
+}
+
 int main() {
+#if 0
     timer_t timer_id;
     std::thread t1(thread_task);  // Start thread for task1
 
@@ -72,14 +79,20 @@ int main() {
     }
 
     t1.join();  // Wait for t1 to finish
-
+#endif
 
     std::string message = "Hello from Timer";
-    int value = 1;
-    Timer timer(print_message, 1000, Timer<decltype(print_message), std::string, int>::Type::Periodic, message, value);
+    int value = 5;
+    Timer timer(print_message, 1000, Timer::Type::Periodic, message, value);
     timer.start();
-    sleep(5);  // Run for 5 seconds
+
+    bool bl = false;
+    Timer timerb(print_bool_message, 1000, Timer::Type::Periodic, message, value, bl);
+    timerb.start();
+
+    sleep(60);
     timer.stop();
+    timerb.start();
     std::cout << "Timer stopped.\n";
 
     return 0;
