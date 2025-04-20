@@ -19,7 +19,23 @@
 #include <iostream>
 #include <unistd.h>
 
+#if 0
+// header needed
 #include "Thread.hpp"
+
+void task(const std::string& name, int val) {
+    for(int i=0; i<10; i++)
+    {
+        std::cout << "Task " << name << ": value = " << val << std::endl;
+        sleep(2);
+    }
+}
+
+// how to use
+Thread t(task, 10, 1024 * 1024, Thread::Policy::FIFO, "MyThread", 42);
+t.start();
+t.join();
+#endif
 
 #if 0
 // header needed
@@ -37,20 +53,8 @@ timer.stop();
 std::cout << "Timer stopped.\n";
 #endif
 
-void task(const std::string& name, int val) {
-    for(int i=0; i<10; i++)
-    {
-        std::cout << "Task " << name << ": value = " << val << std::endl;
-        sleep(2);
-    }
-}
 
 int main() {
-    Thread t1(task, 10, 1024 * 1024, Thread::Policy::FIFO, "MyThread", 42);
-    Thread t2(task, 60, 1024 * 1024, Thread::Policy::FIFO, "MyThread", 43);
-    t1.start();
-    t2.start();
-    t2.join();
-    t2.join();
+    
     return 0;
 }

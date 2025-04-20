@@ -2,8 +2,8 @@
 TARGET = application
 
 # Source and include directories
-SRC_DIRS := ./main/src
-INC_DIRS := ./main/inc  ./core
+SRC_DIRS := ./main/src ./core/src
+INC_DIRS := ./main/inc ./core/inc
 
 # Find all .cpp files recursively in SRC_DIRS
 SRC := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.cpp))
