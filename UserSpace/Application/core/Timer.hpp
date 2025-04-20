@@ -19,9 +19,13 @@
  #ifndef _TIMER_HPP_
  #define _TIMER_HPP_
 
+#include <csignal>
+#include <functional>
+#include <tuple>
 #include <cstring>
 #include <cerrno>
-#include <functional>
+#include <stdexcept>
+#include <time.h>
 
 class Timer {
 public:
@@ -39,15 +43,15 @@ public:
         callback_ = [cb = std::forward<T>(callback),
                      tup = std::make_tuple(std::forward<Args>(args)...)]() mutable {
                         std::apply(cb, tup);
-                     };
+                    };
         memset(&sev_, 0, sizeof(sev_));
         sev_.sigev_notify = SIGEV_THREAD;
         sev_.sigev_notify_function = [](union sigval sv) {
-                                                             Timer* timer = static_cast<Timer*>(sv.sival_ptr);
-                                                             if (timer && timer->callback_) {
-                                                                timer->callback_(); // call the stored lambda
-                                                            }
-                                                         };
+                                         Timer* timer = static_cast<Timer*>(sv.sival_ptr);
+                                         if (timer && timer->callback_) {
+                                            timer->callback_(); // call the stored lambda
+                                         }
+                                     };
         sev_.sigev_value.sival_ptr = this;
         if(timer_create(CLOCK_REALTIME, &sev_, &timer_id_) != 0) {
             throw std::runtime_error("Failed to create timer: " + std::string(std::strerror(errno)));

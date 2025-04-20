@@ -17,83 +17,40 @@
  ******************************************************************************/
 
 #include <iostream>
-#include <csignal>
-#include <time.h>
 #include <unistd.h>
-#include <thread>
 
-#include "Timer.hpp"
+#include "Thread.hpp"
 
 #if 0
-void timer_callback(union sigval val) {
-    std::cout << "Timer callback fired!" << std::endl;
-}
-
-void thread_task() {
-    while (true) {
-        std::cout << "Thread Task ..." << std::endl;
-        sleep(10);
-    }
-}
-#endif
-
-void print_message(const std::string& msg, int count) {
-    std::cout << "[Timer] " << msg << " #" << count << std::endl;
-}
+// header needed
+#include "Timer.hpp"
 
 void print_bool_message(const std::string& msg, int count, bool print) {
     std::cout << "[Timer] " << msg << " #" << count << " bool " << print << std::endl;
 }
 
-int main() {
-#if 0
-    timer_t timer_id;
-    std::thread t1(thread_task);  // Start thread for task1
-
-    struct sigevent sev {};
-    struct itimerspec its {};
-
-    sev.sigev_notify = SIGEV_THREAD;              // Call callback in new thread
-    sev.sigev_notify_function = timer_callback;   // Your callback
-    sev.sigev_value.sival_ptr = nullptr;          // Optional data to pass
-
-    if (timer_create(CLOCK_REALTIME, &sev, &timer_id) == -1) {
-        perror("timer_create");
-        return 1;
-    }
-
-    its.it_value.tv_sec = 1;       // First trigger
-    its.it_interval.tv_sec = 10;    // Repeat every 10 seconds
-
-    if (timer_settime(timer_id, 0, &its, nullptr) == -1) {
-        perror("timer_settime");
-        return 1;
-    }
-
-    std::cout << "Main thread continues..." << std::endl;
-
-    // Keep the main thread alive to let timer callbacks happen
-    while (true) {
-        std::cout << "Main Thread..." << std::endl;
-        sleep(10);
-    }
-
-    t1.join();  // Wait for t1 to finish
+// how to use
+bool bl = false;
+Timer timer(print_bool_message, 1000, Timer::Type::Periodic, message, value, bl);
+timer.start();
+timer.stop();
+std::cout << "Timer stopped.\n";
 #endif
 
-    std::string message = "Hello from Timer";
-    int value = 5;
-    Timer timer(print_message, 1000, Timer::Type::Periodic, message, value);
-    timer.start();
+void task(const std::string& name, int val) {
+    for(int i=0; i<10; i++)
+    {
+        std::cout << "Task " << name << ": value = " << val << std::endl;
+        sleep(2);
+    }
+}
 
-    bool bl = false;
-    Timer timerb(print_bool_message, 1000, Timer::Type::Periodic, message, value, bl);
-    timerb.start();
-
-    sleep(60);
-    timer.stop();
-    timerb.start();
-    std::cout << "Timer stopped.\n";
-
+int main() {
+    Thread t1(task, 10, 1024 * 1024, Thread::Policy::FIFO, "MyThread", 42);
+    Thread t2(task, 60, 1024 * 1024, Thread::Policy::FIFO, "MyThread", 43);
+    t1.start();
+    t2.start();
+    t2.join();
+    t2.join();
     return 0;
 }
