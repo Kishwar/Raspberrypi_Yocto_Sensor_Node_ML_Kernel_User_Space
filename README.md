@@ -14,20 +14,20 @@ In this project, I will develop following things.
 
 # Create SDK to build application for Raspberrypi running yocto
 Add following lines to kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi/conf$ nano local.conf
-```
+```bash
 PACKAGECONFIG:append:pn-gcc-runtime = " static-libstdc++"
 DISTRO_FEATURES:append = " staticdev"
 SDKIMAGE_FEATURES:append = " staticdev-pkgs"
 ```
 
 Run following commands
-```
+```bash
 kkumar@DESKTOP-NK9HSKR:~/embd_linux$ source poky/oe-init-build-env build_pi
 kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi$ bitbake -c cleansstate gcc-runtime
 kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi$ bitbake gcc-runtime
 kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi$ bitbake core-image-minimal -c populate_sdk
 ```
-```
+```bash
 kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi$ source /opt/poky/4.0.21/environment-setup-cortexa7t2hf-neon-vfpv4-poky-linux-gnueabi
 kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi$ cd tmp/deploy/sdk/
 kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi/tmp/deploy/sdk$ ./poky-glibc-x86_64-core-image-minimal-cortexa7t2hf-neon-vfpv4-raspberrypi3-toolchain-4.0.21.sh
@@ -35,13 +35,58 @@ kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi/tmp/deploy/sdk$ . /opt/poky/4.0.21/
 ```
 
 # Build Application
-```
+```bash
 kkumar@DESKTOP-NK9HSKR:~/Raspberrypi_Yocto_Sensor_Node_ML_Kernel_User_Space/UserSpace/Application$ source /opt/poky/4.0.21/environment-setup-cortexa7t2hf-neon-vfpv4-poky-linux-gnueabi
 kkumar@DESKTOP-NK9HSKR:~/Raspberrypi_Yocto_Sensor_Node_ML_Kernel_User_Space/UserSpace/Application$ make
 ```
 
 # Build Kernel
-```
+```bash
 kkumar@DESKTOP-NK9HSKR:~/embd_linux$ source poky/oe-init-build-env build_pi
 kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi$ bitbake virtual/kernel -c devshell
 ```
+
+# Plug auto-reload Application to systemd
+## Step.1: Binaries path
+```bash
+root@raspberrypi3:/home# ls -la application 
+-rwxr-xr-x    1 root     root        298292 Apr 21 10:56 application
+```
+## Step.2: Create a service file
+```bash
+sudo nano /etc/systemd/system/myapp.service
+```
+
+## Step.3: Paste this in file above
+```bash
+[Unit]
+Description=EmbeddedApp
+After=network.target
+
+[Service]
+ExecStart=/home/application
+Restart=on-failure
+User=pi
+WorkingDirectory=/home
+
+[Install]
+WantedBy=multi-user.target
+```
+
+## Step.4: Reload systemd and enable it
+```bash
+sudo systemctl daemon-reexec
+sudo systemctl daemon-reload
+sudo systemctl enable myapp.service
+sudo systemctl start myapp.service
+```
+
+## Step.5: Now it will auto-run on every boot! (To check its status or logs)
+```bash
+sudo systemctl status myapp.service
+journalctl -u myapp.service
+```
+
+
+
+
