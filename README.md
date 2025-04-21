@@ -40,13 +40,14 @@ kkumar@DESKTOP-NK9HSKR:~/Raspberrypi_Yocto_Sensor_Node_ML_Kernel_User_Space/User
 kkumar@DESKTOP-NK9HSKR:~/Raspberrypi_Yocto_Sensor_Node_ML_Kernel_User_Space/UserSpace/Application$ make
 ```
 
-# Build Kernel
+# Build Kernel Module
 ```bash
 kkumar@DESKTOP-NK9HSKR:~/embd_linux$ source poky/oe-init-build-env build_pi
 kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi$ bitbake virtual/kernel -c devshell
 ```
 
-# Plug auto-reload Application to systemd
+# Plug Application to systemd for auto-reload
+
 ## Step.1: Binaries path
 ```bash
 root@raspberrypi3:/home# ls -la application 
@@ -87,6 +88,42 @@ sudo systemctl status myapp.service
 journalctl -u myapp.service
 ```
 
+# Plug Kernel Module (.ko) to systemd for auto-reload
+
+## Step.1: Create service file
+```bash
+sudo nano /etc/systemd/system/mydrivers.service
+```
+
+## Step.2: Paste this in file above
+```bash
+# /etc/systemd/system/mydrivers.service
+[Unit]
+Description=Load custom kernel module
+Before=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/sbin/modprobe mydrivers
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+```
+
+## Step.3: Reload systemd and enable it
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable mydrivers
+sudo systemctl start mydrivers
+```
+
+## Step.4: Now it will auto-reload on every boot! (To check its status or logs)
+```bash
+lsmod | grep mydrivers
+# OR
+dmesg | grep mydrivers
+```
 
 
 
