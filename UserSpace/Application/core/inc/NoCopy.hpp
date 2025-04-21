@@ -1,5 +1,5 @@
 /******************************************************************************
- *  @file       Service.hpp
+ *  @file       NoCopy.hpp
  *  @brief      Base class to be extended by all the drived classes
  *
  *  @copyright  Copyright (c) 2025 Kishwar Kumar
@@ -16,12 +16,18 @@
  *  @note       This code is not open source. Unauthorized use is not permitted.
  ******************************************************************************/
 
-#ifndef _SERVICE_HPP_
-#define _SERVICE_HPP_
+#ifndef _NOCOPY_HPP
+#define _NOCOPY_HPP
 
-class Service {
+class NoCopy {
 public:
+    NoCopy() = default;
+    virtual ~NoCopy() = default;
 
-};
+    NoCopy(const NoCopy&) = delete;            // Copy constructor deleted
+    NoCopy& operator=(const NoCopy&) = delete; // Copy assignment deleted
+    NoCopy(NoCopy&&) = delete;                 // Move constructor deleted
+    NoCopy& operator=(NoCopy&&) = delete;      // Move assignment deleted
+ };
 
-#endif  // _SERVICE_HPP_
+ #endif // _NOCOPY_HPP

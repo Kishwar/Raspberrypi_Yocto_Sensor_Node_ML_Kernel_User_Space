@@ -1,6 +1,6 @@
 /******************************************************************************
- *  @file       Service.hpp
- *  @brief      Base class to be extended by all the drived classes
+ *  @file       TelnetIf.hpp
+ *  @brief      Implements Telnet service using Linux socket
  *
  *  @copyright  Copyright (c) 2025 Kishwar Kumar
  *              All rights reserved.
@@ -16,12 +16,13 @@
  *  @note       This code is not open source. Unauthorized use is not permitted.
  ******************************************************************************/
 
-#ifndef _SERVICE_HPP_
-#define _SERVICE_HPP_
+#ifndef _TELNETIF_HPP_
+#define _TELNETIF_HPP_
 
-class Service {
+class TelnetIf {
 public:
-
+    virtual int readNoBlock() = 0;
+    virtual int readBlocked() = 0;
 };
 
-#endif  // _SERVICE_HPP_
+#endif  // _TELNETIF_HPP_

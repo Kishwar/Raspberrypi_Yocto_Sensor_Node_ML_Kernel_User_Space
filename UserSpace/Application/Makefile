@@ -24,6 +24,7 @@ LDFLAGS := -static-libstdc++ -static-libgcc -pthread
 .PHONY: all clean info
 
 all:
+# source /opt/poky/4.0.21/environment-setup-cortexa7t2hf-neon-vfpv4-poky-linux-gnueabi
 	$(CXX) $(CXXFLAGS) $(SRC) $(LDFLAGS) -o $(TARGET)
 	arm-poky-linux-gnueabi-strip $(TARGET)
 clean:

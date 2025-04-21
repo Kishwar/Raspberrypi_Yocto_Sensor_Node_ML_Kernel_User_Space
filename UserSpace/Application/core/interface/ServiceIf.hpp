@@ -1,6 +1,6 @@
 /******************************************************************************
- *  @file       TelnetIf.hpp
- *  @brief      Implements Telnet service using Linux socket
+ *  @file       ServiceIf.hpp
+ *  @brief      Base class to be extended by Service classe
  *
  *  @copyright  Copyright (c) 2025 Kishwar Kumar
  *              All rights reserved.
@@ -15,3 +15,13 @@
  *
  *  @note       This code is not open source. Unauthorized use is not permitted.
  ******************************************************************************/
+
+#ifndef _SERVICEIF_HPP_
+#define _SERVICEIF_HPP_
+
+class ServiceIf {
+public:
+
+};
+
+#endif  // _SERVICEIF_HPP_

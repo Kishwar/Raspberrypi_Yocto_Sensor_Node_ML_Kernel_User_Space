@@ -1,3 +1,4 @@
+#include "Telnet.hpp"
 /******************************************************************************
  *  @file       Telnet.cpp
  *  @brief      Implements Telnet service using Linux socket
@@ -15,3 +16,15 @@
  *
  *  @note       This code is not open source. Unauthorized use is not permitted.
  ******************************************************************************/
+
+#include "Telnet.hpp"
+
+int Telnet::readNoBlock()
+{
+    return 0;
+}
+
+int Telnet::readBlocked()
+{
+    return 0;
+}

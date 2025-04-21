@@ -15,3 +15,27 @@
  *
  *  @note       This code is not open source. Unauthorized use is not permitted.
  ******************************************************************************/
+
+#ifndef _TELNET_HPP_
+#define _TELNET_HPP_
+
+#include "TelnetIf.hpp"
+#include "ServiceIf.hpp"
+#include "NoCopy.hpp"
+
+class Telnet : public TelnetIf, public ServiceIf, private NoCopy {
+public:
+    static Telnet& getInstance() {
+        static Telnet instance;
+        return instance;
+    }
+
+    int readNoBlock() override;
+    int readBlocked() override;
+
+private:
+    Telnet() = default;
+    ~Telnet() = default;
+};
+
+#endif  // _TELNET_HPP_
