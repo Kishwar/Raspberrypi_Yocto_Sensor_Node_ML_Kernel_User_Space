@@ -19,7 +19,9 @@
 #include <iostream>
 #include <unistd.h>
 
-#include "TelnetServer.hpp"
+#include "Cli.hpp"
+
+#include <thread>
 
 #if 0
 // header needed
@@ -58,7 +60,7 @@ std::cout << "Timer stopped.\n";
 
 int main() {
     try {
-        auto& server = TelnetServer::getInstance();  // Singleton starts itself
+        CLI& cli = CLI::getInstance();
         while (true) {
             // Your main app logic here (or just sleep)
             std::this_thread::sleep_for(std::chrono::seconds(1));

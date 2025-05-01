@@ -15,3 +15,26 @@
  *
  *  @note       This code is not open source. Unauthorized use is not permitted.
  ******************************************************************************/
+
+#ifndef _CLI_HPP_
+#define _CLI_HPP_
+
+#include "TelnetServer.hpp"
+
+class CLI : public TelnetServer {
+public:
+    static CLI& getInstance() {
+        static CLI instance;
+        return instance;
+    }
+
+    CLI() : TelnetServer(23) {}
+    ~CLI() = default;
+
+    void write() override;
+    void read() override;
+private:
+
+};
+
+#endif  // _CLI_HPP_

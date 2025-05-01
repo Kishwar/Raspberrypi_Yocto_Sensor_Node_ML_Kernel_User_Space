@@ -35,11 +35,17 @@ public:
         RR   = SCHED_RR
     };
 
+    enum class State {
+        JOIN = PTHREAD_CREATE_JOINABLE,
+        DETACH = PTHREAD_CREATE_DETACHED
+    };
+
     template <typename T, typename... Args>
-    Thread(T&& callback, int prio, size_t stackSize, Policy policy, Args&&... args)
+    Thread(T&& callback, int prio, size_t stackSize, Policy policy, State state, Args&&... args)
          : priority_(prio),
            stack_size_(stackSize),
-           policy_(static_cast<int>(policy))
+           policy_(static_cast<int>(policy)),
+           state_(static_cast<int>(state))
     {
         func_ = [cb = std::forward<T>(callback),
                  tup = std::make_tuple(std::forward<Args>(args)...)]() mutable {
@@ -63,6 +69,9 @@ public:
         sched_param param{};
         param.sched_priority = priority_;
         pthread_attr_setschedparam(&attr_, &param);
+
+        // set thread State
+        pthread_attr_setdetachstate(&attr_, state_);
 
         // Create thread
         if (pthread_create(&thread_, &attr_, [](void* arg) -> void* {
@@ -92,6 +101,7 @@ private:
     int priority_;
     size_t stack_size_;
     int policy_;
+    int state_;
 };
 
 #endif // _THREAD_HPP_

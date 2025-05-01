@@ -1,3 +1,4 @@
+#include "Cli.hpp"
 /******************************************************************************
  *  @file       Cli.cpp
  *  @brief      Implements CLI service runs over telnet
@@ -15,3 +16,18 @@
  *
  *  @note       This code is not open source. Unauthorized use is not permitted.
  ******************************************************************************/
+
+#include "Cli.hpp"
+
+#include <ostream>     /** \todo remove this */
+#include <iostream>    /** \todo remove this */
+
+void CLI::write()
+{
+    std::cout << __func__ << std::endl;
+}
+
+void CLI::read()
+{
+    std::cout << __func__ << std::endl;
+}

@@ -23,8 +23,11 @@
 
 class TelnetServerIf {
 public:
-    virtual ssize_t writeData(const std::string& data) = 0;
-    virtual std::string readData(size_t maxLength) = 0;
+    virtual ssize_t sockWrite(const std::string& data) = 0;
+    virtual std::string sockRead(char terminator) = 0;
+
+    virtual void write() = 0;
+    virtual void read() = 0;
 };
 
 #endif  // _TELNET_SERVER_IF_HPP_

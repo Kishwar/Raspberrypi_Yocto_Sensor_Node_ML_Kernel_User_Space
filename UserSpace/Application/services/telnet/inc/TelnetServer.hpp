@@ -21,34 +21,30 @@
 
 #include "TelnetServerIf.hpp"
 #include "ServiceIf.hpp"
-#include "NoCopy.hpp"
+#include "Thread.hpp"
 
 #include <atomic>
-#include <thread>
+#include <memory>
 
-class TelnetServer : public TelnetServerIf, public ServiceIf, private NoCopy {
+class TelnetServer : public TelnetServerIf, public ServiceIf {
 public:
-    static TelnetServer& getInstance() {
-        static TelnetServer instance;
-        return instance;
-    }
-
-    ssize_t writeData(const std::string& data) override;
-    std::string readData(size_t maxLength = 1024) override;
-
-private:
-    TelnetServer();
+    TelnetServer(uint16_t port);
     ~TelnetServer();
 
+    ssize_t sockWrite(const std::string& data) override;
+    std::string sockRead(char terminator) override;
+
+private:
     void setupServer();
     void acceptAndHandleClient();
-    void handleClient(int fd);
     void closeSockets();
 
-    static constexpr uint16_t PORT = 23;
-    int server_fd;
-    std::atomic<int> client_fd;
-    std::thread client_thread;         // this will be replaced
+    uint16_t mPort_;
+    int mServerFd_;
+    std::atomic<int> mClientFd_;
+    std::unique_ptr<Thread> minor_;
+    std::unique_ptr<Thread> write_;
+    std::unique_ptr<Thread> read_;
 };
 
 #endif  // _TELNET_SERVER_HPP_
