@@ -28,11 +28,11 @@
 
 TelnetServer::TelnetServer(uint16_t port) : mPort_(port), mServerFd_(-1), mClientFd_(-1) {
     setupServer();
-    minor_ =  std::make_unique<Thread>(&TelnetServer::acceptAndHandleClient, 10  /** \todo replace magic number */,
-                                                    8 * 1024  /** \todo replace magic number */,
-                                                    Thread::Policy::FIFO,
-                                                    Thread::State::DETACH,
-                                                    this);
+    minor_ =  std::make_unique<Thread>(&TelnetServer::acceptAndHandleClient, 10        /** \todo replace magic number */,
+                                                                             8 * 1024  /** \todo replace magic number */,
+                                                                             Thread::Policy::FIFO,
+                                                                             Thread::State::DETACH,
+                                                                             this);
     minor_->start();
 }
 
@@ -91,6 +91,7 @@ void TelnetServer::acceptAndHandleClient() {
                              Thread::Policy::FIFO,
                              Thread::State::DETACH);
 
+    /* start deligated threads -- drived class implements them */
     write_->start();
     read_->start();
 }

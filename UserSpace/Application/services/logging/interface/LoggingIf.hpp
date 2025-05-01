@@ -1,6 +1,6 @@
 /******************************************************************************
- *  @file       Cli.hpp
- *  @brief      Implements CLI service runs over telnet
+ *  @file       LoggingIf.hpp
+ *  @brief      Implements Logging service runs over telnet
  *
  *  @copyright  Copyright (c) 2025 Kishwar Kumar
  *              All rights reserved.
@@ -15,26 +15,3 @@
  *
  *  @note       This code is not open source. Unauthorized use is not permitted.
  ******************************************************************************/
-
-#ifndef _CLI_HPP_
-#define _CLI_HPP_
-
-#include "TelnetServer.hpp"
-
-class CLI : public TelnetServer {
-public:
-    static CLI& getInstance() {
-        static CLI instance;
-        return instance;
-    }
-
-    CLI() : TelnetServer(PORT) {}
-    ~CLI() = default;
-
-    void write() override;
-    void read() override;
-private:
-    static constexpr uint16_t PORT = 23;
-};
-
-#endif  // _CLI_HPP_
