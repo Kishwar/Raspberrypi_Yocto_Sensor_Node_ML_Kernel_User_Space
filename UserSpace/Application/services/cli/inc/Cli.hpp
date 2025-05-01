@@ -20,6 +20,25 @@
 #define _CLI_HPP_
 
 #include "TelnetServer.hpp"
+#include "AutoInit.hpp"
+
+#include <vector>
+#include <string>
+
+struct CLICommand {
+    const char* name;
+    int (*handler)(const std::vector<std::string>& args);
+};
+
+#define CLI_SECTION __attribute__((section("cli_cmds")))
+#define CLI_COMMAND_REGISTER(name, ClassName, MethodName)                                           \
+    static int __##ClassName##_##MethodName##_trampoline(const std::vector<std::string>& args) {    \
+        return ClassName::getInstance().MethodName(args);                                           \
+    }                                                                                               \
+    static const CLICommand __cmd_##ClassName##_##MethodName CLI_SECTION __attribute__((used)) = {  \
+        name, __##ClassName##_##MethodName##_trampoline                                             \
+    }                                                                                               \
+
 
 class CLI : public TelnetServer {
 public:
@@ -35,6 +54,10 @@ public:
     void read() override;
 private:
     static constexpr uint16_t PORT = 23;
+    std::vector<std::string> tokenize(const std::string& input);
+    int executeCommand(const std::string& input);
 };
+
+REGISTER_AUTO_INIT(CLI)
 
 #endif  // _CLI_HPP_

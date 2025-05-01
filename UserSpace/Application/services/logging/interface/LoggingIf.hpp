@@ -22,6 +22,7 @@
 #include "NoCopy.hpp"
 
 #include <string>
+#include <vector>
 
 enum class Level {
     FATAL, ERROR, INFO, DEBUG, MEDIUM, HIGH
@@ -30,7 +31,7 @@ enum class Level {
 class LoggingIf : private NoCopy {
 public:
     virtual void log(const Level level, const std::string& content) = 0;
-    virtual void setLevel(const Level level) = 0;
+    virtual int setLevel(const std::vector<std::string>& args) = 0;
 };
 
 #endif  // _LOGGING_IF_HPP

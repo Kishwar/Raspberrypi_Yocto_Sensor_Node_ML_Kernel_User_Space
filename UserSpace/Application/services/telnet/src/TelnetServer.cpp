@@ -99,5 +99,22 @@ ssize_t TelnetServer::sockWrite(const std::string& data) {
 }
 
 std::string TelnetServer::sockRead(char terminator) {
-    return nullptr;
+    std::string input;
+    char ch;
+    while (true) {
+        int n = recv(mClientFd_, &ch, 1, 0);
+        unsigned char u = static_cast<unsigned char>(ch);
+        if (u == 0xFF) {
+            char skip[2];
+            recv(mClientFd_, skip, 2, 0);   // Telnet command sequence — skip next 2 bytes
+            continue;
+        }
+        if (n <= 0) break;                  // error or disconnect
+
+        if (ch == '\r') continue;           // ignore carriage return
+        if (ch == terminator) break;        // stop on newline
+
+        input += ch;
+    }
+    return input;
 }

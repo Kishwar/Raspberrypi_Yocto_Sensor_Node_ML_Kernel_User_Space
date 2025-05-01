@@ -18,29 +18,24 @@
 
 #include <iostream>
 #include <unistd.h>
-
-#include "Cli.hpp"
-#include "Logging.hpp"
-#include "LoggingIf.hpp"
-
 #include <thread>
+
+#include "AutoInit.hpp"
+
+extern InitFunc __start_init_calls[];
+extern InitFunc __stop_init_calls[];
+
+void callAllInitializers() {
+    for (InitFunc* f = __start_init_calls; f < __stop_init_calls; ++f) {
+        (*f)();  // calls Class::getInstance() indirectly
+    }
+}
 
 int main() {
     try {
-        CLI& cli = CLI::getInstance();
+        callAllInitializers();  // ⚡ automatically initializes CLI, Logging, etc.
         while (true) {
-            std::this_thread::sleep_for(std::chrono::seconds(3));
-            PRINTLOG(Level::FATAL, "new traces sent to telnet");
-            std::this_thread::sleep_for(std::chrono::seconds(3));
-            PRINTLOG(Level::ERROR, "new traces sent to telnet");
-            std::this_thread::sleep_for(std::chrono::seconds(3));
-            PRINTLOG(Level::INFO, "new traces sent to telnet");
-            std::this_thread::sleep_for(std::chrono::seconds(3));
-            PRINTLOG(Level::DEBUG, "new traces sent to telnet");
-            std::this_thread::sleep_for(std::chrono::seconds(3));
-            PRINTLOG(Level::MEDIUM, "new traces sent to telnet");
-            std::this_thread::sleep_for(std::chrono::seconds(3));
-            PRINTLOG(Level::HIGH, "new traces sent to telnet");
+            std::this_thread::sleep_for(std::chrono::seconds(30));
         }
     } catch (const std::exception& e) {
         std::cerr << "Server error: " << e.what() << std::endl;

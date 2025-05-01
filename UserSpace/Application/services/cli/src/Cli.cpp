@@ -18,16 +18,56 @@
  ******************************************************************************/
 
 #include "Cli.hpp"
+#include "Logging.hpp"
 
-#include <ostream>     /** \todo remove this */
-#include <iostream>    /** \todo remove this */
+#include <sstream>
+
+extern const CLICommand __start_cli_cmds[];
+extern const CLICommand __stop_cli_cmds[];
 
 void CLI::write()
 {
-    std::cout << __func__ << std::endl;
+
 }
 
 void CLI::read()
 {
-    std::cout << __func__ << std::endl;
+    while(true) {
+        std::string val = sockRead('\n');
+        executeCommand(val);
+    }
+}
+
+std::vector<std::string> CLI::tokenize(const std::string& input) {
+    std::vector<std::string> tokens;
+    std::string token;
+    std::istringstream ss(input);
+
+    while (std::getline(ss, token, ',')) {
+        size_t start = token.find_first_not_of(" \t");
+        size_t end = token.find_last_not_of(" \t");
+        if (start != std::string::npos && end != std::string::npos)
+            tokens.emplace_back(token.substr(start, end - start + 1));
+        else
+            tokens.emplace_back("");  // handle empty
+    }
+
+    return tokens;
+}
+
+int CLI::executeCommand(const std::string& input) {
+    auto tokens = tokenize(input);
+    if (tokens.empty()) return -1;
+
+    const std::string& cmd = tokens[0];
+    std::vector<std::string> args(tokens.begin() + 1, tokens.end());
+
+    for (const CLICommand* c = __start_cli_cmds; c < __stop_cli_cmds; ++c) {
+        if (cmd == c->name) {
+            PRINTLOG(Level::INFO, "2. cmd " << cmd << " c->name " << c->name << " found, calling handle");
+            return c->handler(args);
+        }
+    }
+
+    return -1;
 }

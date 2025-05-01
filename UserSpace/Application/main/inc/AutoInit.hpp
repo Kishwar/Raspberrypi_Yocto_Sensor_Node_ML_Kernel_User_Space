@@ -1,6 +1,6 @@
 /******************************************************************************
- *  @file       main.cpp
- *  @brief      main file of the project
+ *  @file       AutoInit.cpp
+ *  @brief      Automatically initializes the components
  *
  *  @copyright  Copyright (c) 2025 Kishwar Kumar
  *              All rights reserved.
@@ -15,3 +15,15 @@
  *
  *  @note       This code is not open source. Unauthorized use is not permitted.
  ******************************************************************************/
+
+#ifndef _AUTOINIT_HPP_
+#define _AUTOINIT_HPP_
+
+using InitFunc = void (*)();
+
+#define INIT_SECTION __attribute__((section("init_calls")))
+#define REGISTER_AUTO_INIT(ClassName) \
+    static void __##ClassName##_initCaller() { (void)ClassName::getInstance(); } \
+    static InitFunc __init_##ClassName INIT_SECTION __attribute__((used)) = __##ClassName##_initCaller;
+
+#endif // _AUTOINIT_HPP_

@@ -21,7 +21,7 @@
 #include <iostream>
 
 Logging::Logging() : TelnetServer(PORT),
-                     level_(Level::HIGH),
+                     level_(Level::INFO),
                      queue_(std::make_unique<Queue<std::string>>()) {
 }
 
@@ -73,8 +73,9 @@ void Logging::log(const Level level, const std::string &content) {
     queue_->send(oss.str());
 }
 
-void Logging::setLevel(const Level level) {
-    level_ = level;
+int Logging::setLevel(const std::vector<std::string>& args) {
+    
+    return 0;
 }
 
 void Logging::write() {
