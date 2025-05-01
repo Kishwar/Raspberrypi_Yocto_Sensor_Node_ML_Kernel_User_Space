@@ -12,6 +12,9 @@ In this project, I will develop following things.
 # Hardware
 ![devshell](RapberryPi_Sensors_OLED_Ethernet.jpeg)
 
+# Application
+![devshell](Application_Overview.jpg)
+
 # Create SDK to build application for Raspberrypi running yocto
 Add following lines to kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi/conf$ nano local.conf
 ```bash

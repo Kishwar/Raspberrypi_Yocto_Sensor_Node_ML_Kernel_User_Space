@@ -1,6 +1,6 @@
 /******************************************************************************
- *  @file       Telnet.hpp
- *  @brief      Implements Telnet service using Linux socket
+ *  @file       TelnetServerIf.hpp
+ *  @brief      Implements Telnet Server service using Linux socket
  *
  *  @copyright  Copyright (c) 2025 Kishwar Kumar
  *              All rights reserved.
@@ -16,26 +16,15 @@
  *  @note       This code is not open source. Unauthorized use is not permitted.
  ******************************************************************************/
 
-#ifndef _TELNET_HPP_
-#define _TELNET_HPP_
+#ifndef _TELNET_SERVER_IF_HPP_
+#define _TELNET_SERVER_IF_HPP_
 
-#include "TelnetIf.hpp"
-#include "ServiceIf.hpp"
-#include "NoCopy.hpp"
+#include <string>
 
-class Telnet : public TelnetIf, public ServiceIf, private NoCopy {
+class TelnetServerIf {
 public:
-    static Telnet& getInstance() {
-        static Telnet instance;
-        return instance;
-    }
-
-    int readNoBlock() override;
-    int readBlocked() override;
-
-private:
-    Telnet() = default;
-    ~Telnet() = default;
+    virtual ssize_t writeData(const std::string& data) = 0;
+    virtual std::string readData(size_t maxLength) = 0;
 };
 
-#endif  // _TELNET_HPP_
+#endif  // _TELNET_SERVER_IF_HPP_

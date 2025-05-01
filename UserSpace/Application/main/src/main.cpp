@@ -19,6 +19,8 @@
 #include <iostream>
 #include <unistd.h>
 
+#include "TelnetServer.hpp"
+
 #if 0
 // header needed
 #include "Thread.hpp"
@@ -55,6 +57,14 @@ std::cout << "Timer stopped.\n";
 
 
 int main() {
-    
+    try {
+        auto& server = TelnetServer::getInstance();  // Singleton starts itself
+        while (true) {
+            // Your main app logic here (or just sleep)
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+        }
+    } catch (const std::exception& e) {
+        std::cerr << "Server error: " << e.what() << std::endl;
+    }
     return 0;
 }
