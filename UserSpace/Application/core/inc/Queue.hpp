@@ -27,6 +27,14 @@
 template <typename T>
 class Queue {
 public:
+    Queue() : Queue(SIZE) {}
+
+    Queue(uint32_t size) : capacity_(size) {
+        while (!queue_.empty()) queue_.pop();
+    }
+
+    ~Queue() = default;
+
     void send(const T& item) {
         std::lock_guard<std::mutex> lock(mutex_);
         queue_.push(item);
@@ -40,7 +48,7 @@ public:
                              });
         T item = queue_.front();
         queue_.pop();
-        return T;
+        return item;
     }
 
     bool receive_with_timeout(T& item, std::chrono::milliseconds timeout) {
@@ -64,6 +72,8 @@ private:
     std::queue<T> queue_;
     std::mutex mutex_;
     std::condition_variable cond_;
+    uint32_t capacity_ = 0;
+    static constexpr uint16_t SIZE = 200;
 };
 
 #endif  // _QUEUE_HPP_

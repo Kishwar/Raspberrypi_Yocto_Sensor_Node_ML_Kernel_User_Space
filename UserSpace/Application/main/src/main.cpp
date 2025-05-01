@@ -20,50 +20,27 @@
 #include <unistd.h>
 
 #include "Cli.hpp"
+#include "Logging.hpp"
+#include "LoggingIf.hpp"
 
 #include <thread>
-
-#if 0
-// header needed
-#include "Thread.hpp"
-
-void task(const std::string& name, int val) {
-    for(int i=0; i<10; i++)
-    {
-        std::cout << "Task " << name << ": value = " << val << std::endl;
-        sleep(2);
-    }
-}
-
-// how to use
-Thread t(task, 10, 1024 * 1024, Thread::Policy::FIFO, "MyThread", 42);
-t.start();
-t.join();
-#endif
-
-#if 0
-// header needed
-#include "Timer.hpp"
-
-void print_bool_message(const std::string& msg, int count, bool print) {
-    std::cout << "[Timer] " << msg << " #" << count << " bool " << print << std::endl;
-}
-
-// how to use
-bool bl = false;
-Timer timer(print_bool_message, 1000, Timer::Type::Periodic, message, value, bl);
-timer.start();
-timer.stop();
-std::cout << "Timer stopped.\n";
-#endif
-
 
 int main() {
     try {
         CLI& cli = CLI::getInstance();
         while (true) {
-            // Your main app logic here (or just sleep)
-            std::this_thread::sleep_for(std::chrono::seconds(1));
+            std::this_thread::sleep_for(std::chrono::seconds(3));
+            PRINTLOG(Level::FATAL, "new traces sent to telnet");
+            std::this_thread::sleep_for(std::chrono::seconds(3));
+            PRINTLOG(Level::ERROR, "new traces sent to telnet");
+            std::this_thread::sleep_for(std::chrono::seconds(3));
+            PRINTLOG(Level::INFO, "new traces sent to telnet");
+            std::this_thread::sleep_for(std::chrono::seconds(3));
+            PRINTLOG(Level::DEBUG, "new traces sent to telnet");
+            std::this_thread::sleep_for(std::chrono::seconds(3));
+            PRINTLOG(Level::MEDIUM, "new traces sent to telnet");
+            std::this_thread::sleep_for(std::chrono::seconds(3));
+            PRINTLOG(Level::HIGH, "new traces sent to telnet");
         }
     } catch (const std::exception& e) {
         std::cerr << "Server error: " << e.what() << std::endl;

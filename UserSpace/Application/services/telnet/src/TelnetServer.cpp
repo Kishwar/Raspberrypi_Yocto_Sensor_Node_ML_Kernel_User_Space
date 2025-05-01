@@ -1,4 +1,3 @@
-#include "TelnetServer.hpp"
 /******************************************************************************
  *  @file       TelnetServer.cpp
  *  @brief      Implements Telnet Server service using Linux socket
@@ -19,12 +18,9 @@
 
 #include "TelnetServer.hpp"
 
-
 #include <arpa/inet.h>
 #include <stdexcept>
 #include <unistd.h>
-#include <ostream>     /** \todo remove this */
-#include <iostream>    /** \todo remove this */
 
 TelnetServer::TelnetServer(uint16_t port) : mPort_(port), mServerFd_(-1), mClientFd_(-1) {
     setupServer();
@@ -57,39 +53,33 @@ void TelnetServer::setupServer() {
 
     if (listen(mServerFd_, 1) < 0)
         throw std::runtime_error("Listen failed");
-
-    std::cout << __func__ << ":" << __LINE__ << " " << "Telnet server listening on port " << mPort_ << std::endl;        /** \todo replace this with logging */
 }
 
 void TelnetServer::acceptAndHandleClient() {
     sockaddr_in client_addr{};
     socklen_t client_len = sizeof(client_addr);
 
-    std::cout << __func__ << ":" << __LINE__ << " " << std::endl;            /** \todo replace this with logging */
-
     mClientFd_ = accept(mServerFd_, (sockaddr*)&client_addr, &client_len);
     if (mClientFd_ < 0) {
-        std::cerr << "Accept failed" << std::endl;            /** \todo replace this with logging */
+        throw std::runtime_error("Accept failed");
         return;
     }
-    std::cout << "Client connected.\n";            /** \todo replace this with logging */
-
 
     write_ = std::make_unique<Thread>([this]() {
                                         this->write();
                                       },
-                             10,       /** \todo replace magic number */
-                             8 * 1024, /** \todo replace magic number */
-                             Thread::Policy::FIFO,
-                             Thread::State::DETACH);
+                                      10,       /** \todo replace magic number */
+                                      8 * 1024, /** \todo replace magic number */
+                                      Thread::Policy::FIFO,
+                                      Thread::State::DETACH);
 
     read_ = std::make_unique<Thread>([this]() {
                                         this->read();
-                                      },
-                             10,       /** \todo replace magic number */
-                             8 * 1024, /** \todo replace magic number */
-                             Thread::Policy::FIFO,
-                             Thread::State::DETACH);
+                                     },
+                                     10,       /** \todo replace magic number */
+                                     8 * 1024, /** \todo replace magic number */
+                                     Thread::Policy::FIFO,
+                                     Thread::State::DETACH);
 
     /* start deligated threads -- drived class implements them */
     write_->start();
@@ -102,7 +92,10 @@ void TelnetServer::closeSockets() {
 }
 
 ssize_t TelnetServer::sockWrite(const std::string& data) {
-    return -1;
+    if(mClientFd_ > 0)
+        return send(mClientFd_, data.c_str(), data.size(), 0);
+    else
+        return -1;
 }
 
 std::string TelnetServer::sockRead(char terminator) {
