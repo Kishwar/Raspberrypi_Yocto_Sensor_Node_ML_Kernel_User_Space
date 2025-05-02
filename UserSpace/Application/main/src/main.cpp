@@ -16,11 +16,9 @@
  *  @note       This code is not open source. Unauthorized use is not permitted.
  ******************************************************************************/
 
-#include <iostream>
-#include <unistd.h>
-#include <thread>
-
 #include "AutoInit.hpp"
+
+#include <thread>
 
 extern InitFunc __start_init_calls[];
 extern InitFunc __stop_init_calls[];
@@ -38,7 +36,7 @@ int main() {
             std::this_thread::sleep_for(std::chrono::seconds(30));
         }
     } catch (const std::exception& e) {
-        std::cerr << "Server error: " << e.what() << std::endl;
     }
+
     return 0;
 }

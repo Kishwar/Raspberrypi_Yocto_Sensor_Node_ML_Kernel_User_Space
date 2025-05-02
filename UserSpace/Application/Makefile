@@ -23,6 +23,10 @@ CXX ?= $(CROSS_COMPILE)g++
 CXXFLAGS := -Wall -Os -fdata-sections -ffunction-sections -Wl,--gc-sections -std=c++17 $(INCLUDES)
 LDFLAGS := -static-libstdc++ -static-libgcc -pthread
 
+# Map file
+MAPFILE = mapfile.map
+LDFLAGS += -Wl,-Map=$(MAPFILE)
+
 .PHONY: all clean info
 
 all:
@@ -31,6 +35,7 @@ all:
 	arm-poky-linux-gnueabi-strip $(TARGET)
 clean:
 	rm -f $(TARGET)
+	rm -rf $(MAPFILE)
 
 info:
 	@echo "Building: $(TARGET)"
