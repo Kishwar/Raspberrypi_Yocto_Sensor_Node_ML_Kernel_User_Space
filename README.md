@@ -1,4 +1,8 @@
 # Raspberrypi_Yocto_Sensor_Node_ML_Kernel_User_Space
+The project uses **Linkersets** to manage modular initialization with high flexibility and complexity.
+-  All modules registered via linkersets are automatically started during system initialization.
+-  All CLI commands are also registered using linkersets, enabling dynamic command discovery and modular CLI handling.
+
 In this project, I will develop following things.
 -  Kernel device drivers for OLED connected with I2C
 -  Kernel device drivers for OLED connected with SPI

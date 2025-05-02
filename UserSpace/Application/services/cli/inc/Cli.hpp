@@ -68,14 +68,14 @@ public:
         return instance;
     }
 
-    CLI();
-    ~CLI() = default;
-
     void write() override;
     void read() override;
 private:
     static constexpr uint16_t PORT = 23;
     std::unique_ptr<Queue<std::string>> queue_;
+
+    CLI();
+    ~CLI() = default;
 
     std::vector<std::string> tokenize(const std::string& input);
     Codes executeCommand(const std::string& input);

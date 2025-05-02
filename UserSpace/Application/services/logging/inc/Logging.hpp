@@ -40,9 +40,6 @@ public:
         return instance;
     }
 
-    Logging();
-    ~Logging() = default;
-
     void log(const Level level, const std::string& content) override;
     Codes setLevel(const std::vector<std::string>& args) override;
     Codes getLevel(std::string& data) override;
@@ -54,6 +51,9 @@ private:
     Level level_;
     std::unique_ptr<Queue<std::string>> queue_;
     static constexpr uint16_t PORT = 24;
+
+    Logging();
+    ~Logging() = default;
 };
 
 #define __DATETIME__ ([]() -> std::string {                            \

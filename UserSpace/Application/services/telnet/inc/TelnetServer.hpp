@@ -20,13 +20,12 @@
 #define _TELNET_SERVER_HPP_
 
 #include "TelnetServerIf.hpp"
-#include "ServiceIf.hpp"
 #include "Thread.hpp"
 
 #include <atomic>
 #include <memory>
 
-class TelnetServer : public TelnetServerIf, public ServiceIf {
+class TelnetServer : public TelnetServerIf {
 public:
     TelnetServer(uint16_t port);
     ~TelnetServer();
