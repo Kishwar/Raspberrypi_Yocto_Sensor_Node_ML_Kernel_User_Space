@@ -20,7 +20,6 @@
 #define _LOGGING_IF_HPP
 
 #include "CliErrorCodesIf.hpp"
-#include "NoCopy.hpp"
 
 #include <string>
 #include <vector>
@@ -29,7 +28,7 @@ enum class Level {
     FATAL, ERROR, INFO, DEBUG, MEDIUM, HIGH
 };
 
-class LoggingIf : private NoCopy {
+class LoggingIf {
 public:
     virtual void log(const Level level, const std::string& content) = 0;
     virtual Codes setLevel(const std::vector<std::string>& args) = 0;

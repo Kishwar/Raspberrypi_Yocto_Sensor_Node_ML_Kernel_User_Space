@@ -22,7 +22,8 @@
 #include "LoggingIf.hpp"
 #include "TelnetServer.hpp"
 #include "Queue.hpp"
-#include "Cli.hpp"
+#include "AutoInit.hpp"
+#include "CliCommand.hpp"
 
 #include <string>
 #include <sstream>

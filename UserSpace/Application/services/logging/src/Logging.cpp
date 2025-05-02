@@ -67,9 +67,6 @@ void Logging::log(const Level level, const std::string &content) {
     std::ostringstream oss;
     oss << "\r" << color << label << " " << content << "\033[0m" << "\r" << std::endl;
 
-    // log on local terminal
-    std::cout << oss.str();
-
     // log on socket interface
     queue_->send(oss.str());
 }

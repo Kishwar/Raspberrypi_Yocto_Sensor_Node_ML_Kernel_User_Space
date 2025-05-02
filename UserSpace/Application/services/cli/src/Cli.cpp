@@ -22,8 +22,8 @@
 
 #include <sstream>
 
-extern const CLICommand __start_cli_cmds[];
-extern const CLICommand __stop_cli_cmds[];
+extern const CliCommand __start_cli_cmds[];
+extern const CliCommand __stop_cli_cmds[];
 
 CLI::CLI() : TelnetServer(PORT),
              queue_(std::make_unique<Queue<std::string>>()) {
@@ -75,7 +75,7 @@ Codes CLI::executeCommand(const std::string& input) {
     const std::string& cmd = tokens[0];
     std::vector<std::string> args(tokens.begin() + 1, tokens.end());
 
-    for (const CLICommand* c = __start_cli_cmds; c < __stop_cli_cmds; ++c) {
+    for (const CliCommand* c = __start_cli_cmds; c < __stop_cli_cmds; ++c) {
         if (cmd == c->name) {
             if((tokens.size() == 1) && (c->read != nullptr)) {
                 // read operation

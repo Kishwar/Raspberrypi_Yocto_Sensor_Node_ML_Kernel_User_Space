@@ -22,44 +22,11 @@
 #include "CliErrorCodesIf.hpp"
 #include "TelnetServer.hpp"
 #include "AutoInit.hpp"
+#include "CliCommand.hpp"
 #include "Queue.hpp"
 
 #include <vector>
 #include <string>
-
-struct CLICommand {
-    const char* name;
-    Codes (*write)(const std::vector<std::string>& args);
-    Codes (*read)(std::string& data);
-};
-
-#define CLI_SECTION __attribute__((section("cli_cmds")))
-#define CLI_COMMAND_WRITE(name, ClassName, WriteMethod)                                                 \
-    static Codes __##ClassName##_##WriteMethod##_trampoline(const std::vector<std::string>& args) {     \
-        return ClassName::getInstance().WriteMethod(args);                                              \
-    }                                                                                                   \
-    static const CLICommand __cmd_##ClassName##_##WriteMethod CLI_SECTION __attribute__((used)) = {     \
-        name, __##ClassName##_##WriteMethod##_trampoline, nullptr                                       \
-    }                                                                                                   \
-
-#define CLI_COMMAND_READ(name, ClassName, ReadMethod)                                                   \
-    static Codes __##ClassName##_##ReadMethod##_trampoline(std::string& data) {                         \
-        return ClassName::getInstance().ReadMethod(data);                                               \
-    }                                                                                                   \
-    static const CLICommand __cmd_##ClassName##_##ReadMethod CLI_SECTION __attribute__((used)) = {      \
-        name, nullptr, __##ClassName##_##ReadMethod##_trampoline                                        \
-    }                                                                                                   \
-
-#define CLI_COMMAND_REGISTER_BOTH(name, ClassName, WriteMethod, ReadMethod)                             \
-    static Codes __##ClassName##_##WriteMethod##_trampoline(const std::vector<std::string>& args) {     \
-        return ClassName::getInstance().WriteMethod(args);                                              \
-    }                                                                                                   \
-    static Codes __##ClassName##_##ReadMethod##_trampoline(std::string& data) {                         \
-        return ClassName::getInstance().ReadMethod(data);                                               \
-    }                                                                                                   \
-    static const CLICommand __cmd_##ClassName##_##ReadMethod CLI_SECTION __attribute__((used)) = {      \
-        name, __##ClassName##_##WriteMethod##_trampoline, __##ClassName##_##ReadMethod##_trampoline     \
-    }                                                                                                   \
 
 class CLI : public TelnetServer {
 public:

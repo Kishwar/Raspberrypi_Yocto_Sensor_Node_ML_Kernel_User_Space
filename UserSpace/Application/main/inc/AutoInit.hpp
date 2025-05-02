@@ -22,7 +22,7 @@
 using InitFunc = void (*)();
 
 #define INIT_SECTION __attribute__((section("init_calls")))
-#define REGISTER_AUTO_INIT(ClassName) \
+#define REGISTER_AUTO_INIT(ClassName)                                                                       \
     static void __##ClassName##_initCaller() {                                                              \
         ClassName::getInstance();                                                                           \
     }                                                                                                       \
