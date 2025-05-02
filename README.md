@@ -1,6 +1,15 @@
 # Raspberrypi_Yocto_Sensor_Node_ML_Kernel_User_Space
 The project uses **Linkersets** to manage modular initialization with high flexibility and complexity.
 -  All modules registered via linkersets are automatically started during system initialization.
+    ```bash
+        /* register class to be auto-activated at startup (linkerset) */
+        REGISTER_AUTO_INIT(CLI)
+    ```
+
+    ```
+        /* register CLI command with linkerset */
+        CLI_COMMAND_REGISTER_BOTH("loglevel", Logging, setLevel, getLevel);
+    ```
 -  All CLI commands are also registered using linkersets, enabling dynamic command discovery and modular CLI handling.
 
 In this project, I will develop following things.
