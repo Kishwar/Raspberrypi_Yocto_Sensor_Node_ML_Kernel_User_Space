@@ -23,9 +23,9 @@ using InitFunc = void (*)();
 
 #define INIT_SECTION __attribute__((section("init_calls")))
 #define REGISTER_AUTO_INIT(ClassName) \
-    static void __##ClassName##_initCaller() {   \
-        ClassName::getInstance();                \
-    }                                            \
-    static InitFunc __init_##ClassName INIT_SECTION __attribute__((used)) = __##ClassName##_initCaller;
+    static void __##ClassName##_initCaller() {                                                              \
+        ClassName::getInstance();                                                                           \
+    }                                                                                                       \
+    static InitFunc __init_##ClassName INIT_SECTION __attribute__((used)) = __##ClassName##_initCaller;     \
 
 #endif // _AUTOINIT_HPP_
