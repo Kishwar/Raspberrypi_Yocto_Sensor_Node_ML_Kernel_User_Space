@@ -1,6 +1,6 @@
 /******************************************************************************
  *  @file       AutoInit.cpp
- *  @brief      Automatically initializes the components
+ *  @brief      Implements auto initializer registeration linkerset
  *
  *  @copyright  Copyright (c) 2025 Kishwar Kumar
  *              All rights reserved.

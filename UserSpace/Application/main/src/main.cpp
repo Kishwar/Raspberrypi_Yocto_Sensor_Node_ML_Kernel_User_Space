@@ -24,8 +24,8 @@ extern InitFunc __start_init_calls[];
 extern InitFunc __stop_init_calls[];
 
 void callAllInitializers() {
-    for (InitFunc* f = __start_init_calls; f < __stop_init_calls; ++f) {
-        (*f)();  // calls Class::getInstance() indirectly
+    for (InitFunc* fn = __start_init_calls; fn < __stop_init_calls; ++fn) {
+        (*fn)();  // calls Class::getInstance() indirectly
     }
 }
 
