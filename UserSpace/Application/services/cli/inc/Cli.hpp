@@ -51,8 +51,15 @@ struct CLICommand {
     }                                                                                                   \
 
 #define CLI_COMMAND_REGISTER_BOTH(name, ClassName, WriteMethod, ReadMethod)                             \
-    CLI_COMMAND_WRITE(name, ClassName, WriteMethod);                                                    \
-    CLI_COMMAND_READ(name, ClassName, ReadMethod);                                                      \
+    static Codes __##ClassName##_##WriteMethod##_trampoline(const std::vector<std::string>& args) {     \
+        return ClassName::getInstance().WriteMethod(args);                                              \
+    }                                                                                                   \
+    static Codes __##ClassName##_##ReadMethod##_trampoline(std::string& data) {                         \
+        return ClassName::getInstance().ReadMethod(data);                                               \
+    }                                                                                                   \
+    static const CLICommand __cmd_##ClassName##_##ReadMethod CLI_SECTION __attribute__((used)) = {      \
+        name, __##ClassName##_##WriteMethod##_trampoline, __##ClassName##_##ReadMethod##_trampoline     \
+    }                                                                                                   \
 
 class CLI : public TelnetServer {
 public:

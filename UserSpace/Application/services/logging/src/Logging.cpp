@@ -104,6 +104,30 @@ Codes Logging::setLevel(const std::vector<std::string>& args) {
     return Codes::CODE_INVALID_PARAM;
 }
 
+Codes Logging::getLevel(std::string& data) {
+    switch(level_) {
+        case Level::FATAL:
+            data = "FATAL";
+            break;
+        case Level::ERROR:
+            data = "ERROR";
+            break;
+        case Level::INFO:
+            data = "INFO";
+            break;
+        case Level::DEBUG:
+            data = "DEBUG";
+            break;
+        case Level::MEDIUM:
+            data = "MEDIUM";
+            break;
+        case Level::HIGH:
+            data = "HIGH";
+            break;
+    }
+    return Codes::CODE_NO_ERROR;
+}
+
 void Logging::write() {
     while(true) {
         std::string val = queue_->receive();

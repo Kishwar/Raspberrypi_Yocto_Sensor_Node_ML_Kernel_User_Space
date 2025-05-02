@@ -81,14 +81,21 @@ Codes CLI::executeCommand(const std::string& input) {
                 // read operation
                 std::string outData;
                 ret = c->read(outData);
-                /** \todo throw this data */
+                if(Codes::CODE_NO_ERROR == ret) {
+                    queue_->send("\r\n");
+                    queue_->send(outData);
+                    queue_->send("\r\n");
+                    break;
+                }
             } else {
                 // write operation
                 ret = c->write(args);
+                break;
             }
         }
     }
     queue_->send(errCodeStr(ret));
+    queue_->send("\r\n");
     return ret;
 }
 

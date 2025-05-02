@@ -33,6 +33,7 @@ class LoggingIf : private NoCopy {
 public:
     virtual void log(const Level level, const std::string& content) = 0;
     virtual Codes setLevel(const std::vector<std::string>& args) = 0;
+    virtual Codes getLevel(std::string& data) = 0;
 };
 
 #endif  // _LOGGING_IF_HPP

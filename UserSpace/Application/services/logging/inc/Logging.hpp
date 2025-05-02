@@ -16,8 +16,8 @@
  *  @note       This code is not open source. Unauthorized use is not permitted.
  ******************************************************************************/
 
-#ifndef _LOGGING_HPP
-#define _LOGGING_HPP
+#ifndef _LOGGING_HPP_
+#define _LOGGING_HPP_
 
 #include "LoggingIf.hpp"
 #include "TelnetServer.hpp"
@@ -45,6 +45,7 @@ public:
 
     void log(const Level level, const std::string& content) override;
     Codes setLevel(const std::vector<std::string>& args) override;
+    Codes getLevel(std::string& data) override;
 
     void write() override;
     void read() override;
@@ -77,9 +78,9 @@ private:
     } while (0)
 
 /* register CLI command with linkerset */
-CLI_COMMAND_WRITE("loglevel", Logging, setLevel);
+CLI_COMMAND_REGISTER_BOTH("loglevel", Logging, setLevel, getLevel);
 
 /* register class to be auto-activated at startup (linkerset) */
 REGISTER_AUTO_INIT(Logging)
 
-#endif  // _LOGGING_HPP
+#endif  // _LOGGING_HPP_
