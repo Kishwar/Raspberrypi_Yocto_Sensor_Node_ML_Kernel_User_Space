@@ -28,7 +28,7 @@
 class TelnetServer : public TelnetServerIf {
 public:
     TelnetServer(uint16_t port);
-    ~TelnetServer();
+    virtual ~TelnetServer();
 
     ssize_t sockWrite(const std::string& data) override;
     std::string sockRead(char terminator) override;
