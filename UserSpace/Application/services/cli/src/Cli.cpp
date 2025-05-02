@@ -25,14 +25,22 @@
 extern const CLICommand __start_cli_cmds[];
 extern const CLICommand __stop_cli_cmds[];
 
+CLI::CLI() : TelnetServer(PORT),
+             queue_(std::make_unique<Queue<std::string>>()) {
+}
+
 void CLI::write()
 {
-
+    while(true) {
+        std::string val = queue_->receive();
+        sockWrite(val);
+    }
 }
 
 void CLI::read()
 {
     while(true) {
+        queue_->send("CLI>");
         std::string val = sockRead('\n');
         executeCommand(val);
     }
@@ -55,19 +63,40 @@ std::vector<std::string> CLI::tokenize(const std::string& input) {
     return tokens;
 }
 
-int CLI::executeCommand(const std::string& input) {
+Codes CLI::executeCommand(const std::string& input) {
     auto tokens = tokenize(input);
-    if (tokens.empty()) return -1;
+    Codes ret = Codes::CODE_GENERIC_ERROR; 
+
+    if (tokens.empty()) {
+        ret = Codes::CODE_INVALID_PARAM;
+        return ret;
+    }
 
     const std::string& cmd = tokens[0];
     std::vector<std::string> args(tokens.begin() + 1, tokens.end());
 
     for (const CLICommand* c = __start_cli_cmds; c < __stop_cli_cmds; ++c) {
         if (cmd == c->name) {
-            PRINTLOG(Level::INFO, "2. cmd " << cmd << " c->name " << c->name << " found, calling handle");
-            return c->handler(args);
+            if((tokens.size() == 1) && (c->read != nullptr)) {
+                // read operation
+                std::string outData;
+                ret = c->read(outData);
+                /** \todo throw this data */
+            } else {
+                // write operation
+                ret = c->write(args);
+            }
         }
     }
+    queue_->send(errCodeStr(ret));
+    return ret;
+}
 
-    return -1;
+std::string CLI::errCodeStr(Codes code) {
+    switch(code) {
+        case Codes::CODE_NO_ERROR:
+            return "\r\nOK\r\n";
+        default:
+            return "\r\nERROR\r\n";
+    }
 }

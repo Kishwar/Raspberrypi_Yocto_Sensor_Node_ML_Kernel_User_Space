@@ -19,6 +19,7 @@
 #include "Logging.hpp"
 
 #include <iostream>
+#include <algorithm>
 
 Logging::Logging() : TelnetServer(PORT),
                      level_(Level::INFO),
@@ -73,9 +74,34 @@ void Logging::log(const Level level, const std::string &content) {
     queue_->send(oss.str());
 }
 
-int Logging::setLevel(const std::vector<std::string>& args) {
-    
-    return 0;
+Codes Logging::setLevel(const std::vector<std::string>& args) {
+    if(args.empty()) return Codes::CODE_INVALID_PARAM;
+    std::string str = args[0];
+
+    std::transform(str.begin(), str.end(), str.begin(), ::toupper);
+
+    if (str == "FATAL") {
+        level_ = Level::FATAL;
+        return Codes::CODE_NO_ERROR;
+    } else if (str == "ERROR") {
+        level_ = Level::ERROR;
+        return Codes::CODE_NO_ERROR;
+    } else if (str == "INFO") {
+        level_ = Level::INFO;
+        return Codes::CODE_NO_ERROR;
+    } else if (str == "DEBUG") {
+        level_ = Level::DEBUG;
+        return Codes::CODE_NO_ERROR;
+    } else if (str == "MEDIUM") {
+        level_ = Level::MEDIUM;
+        return Codes::CODE_NO_ERROR;
+    } else if (str == "HIGH") {
+        level_ = Level::HIGH;
+        return Codes::CODE_NO_ERROR;
+    }
+
+    PRINTLOG(Level::ERROR, "Invalid argument: " << str);
+    return Codes::CODE_INVALID_PARAM;
 }
 
 void Logging::write() {

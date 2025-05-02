@@ -22,7 +22,7 @@
 #include "LoggingIf.hpp"
 #include "TelnetServer.hpp"
 #include "Queue.hpp"
-#include "Cli.hpp"       /// this is not OK
+#include "Cli.hpp"
 
 #include <string>
 #include <sstream>
@@ -44,7 +44,7 @@ public:
     ~Logging() = default;
 
     void log(const Level level, const std::string& content) override;
-    int setLevel(const std::vector<std::string>& args) override;
+    Codes setLevel(const std::vector<std::string>& args) override;
 
     void write() override;
     void read() override;
@@ -76,8 +76,10 @@ private:
         logging.log(level, oss.str());             \
     } while (0)
 
-CLI_COMMAND_REGISTER("loglevel", Logging, setLevel);
+/* register CLI command with linkerset */
+CLI_COMMAND_WRITE("loglevel", Logging, setLevel);
 
+/* register class to be auto-activated at startup (linkerset) */
 REGISTER_AUTO_INIT(Logging)
 
 #endif  // _LOGGING_HPP

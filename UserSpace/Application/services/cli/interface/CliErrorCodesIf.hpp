@@ -1,6 +1,6 @@
 /******************************************************************************
- *  @file       LoggingIf.hpp
- *  @brief      Implements Logging service runs over telnet
+ *  @file       CliErrorCodesIf.hpp
+ *  @brief      Implements CLI service possible error codes
  *
  *  @copyright  Copyright (c) 2025 Kishwar Kumar
  *              All rights reserved.
@@ -16,23 +16,11 @@
  *  @note       This code is not open source. Unauthorized use is not permitted.
  ******************************************************************************/
 
-#ifndef _LOGGING_IF_HPP
-#define _LOGGING_IF_HPP
+#ifndef _CLI_ERROR_CODES_IF_HPP_
+#define _CLI_ERROR_CODES_IF_HPP_
 
-#include "CliErrorCodesIf.hpp"
-#include "NoCopy.hpp"
-
-#include <string>
-#include <vector>
-
-enum class Level {
-    FATAL, ERROR, INFO, DEBUG, MEDIUM, HIGH
+enum class Codes {
+    CODE_NO_ERROR, CODE_INVALID_PARAM, CODE_GENERIC_ERROR, CODE_MEMORY_FAILURE, CODE_NETWORK_ERROR, CODE_DISPLAY_ERROR
 };
 
-class LoggingIf : private NoCopy {
-public:
-    virtual void log(const Level level, const std::string& content) = 0;
-    virtual Codes setLevel(const std::vector<std::string>& args) = 0;
-};
-
-#endif  // _LOGGING_IF_HPP
+#endif // _CLI_ERROR_CODES_IF_HPP_
