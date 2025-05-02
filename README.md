@@ -5,12 +5,11 @@ The project uses **Linkersets** to manage modular initialization with high flexi
         /* register class to be auto-activated at startup (linkerset) */
         REGISTER_AUTO_INIT(CLI)
     ```
-
+-  All CLI commands are also registered using linkersets, enabling dynamic command discovery and modular CLI handling.
     ```
         /* register CLI command with linkerset */
         CLI_COMMAND_REGISTER_BOTH("loglevel", Logging, setLevel, getLevel);
     ```
--  All CLI commands are also registered using linkersets, enabling dynamic command discovery and modular CLI handling.
 
 In this project, I will develop following things.
 -  Kernel device drivers for OLED connected with I2C
