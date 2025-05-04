@@ -27,6 +27,9 @@ LDFLAGS := -static-libstdc++ -static-libgcc -pthread
 MAPFILE = mapfile.map
 LDFLAGS += -Wl,-Map=$(MAPFILE)
 
+# Linkerset
+LDFLAGS += -Wl,--script=linkerset.ld
+
 .PHONY: all clean info
 
 all:
