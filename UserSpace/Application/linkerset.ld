@@ -21,16 +21,15 @@
  ***********************************************************************************/
 
 SECTIONS {
-    .cli_cmds : ALIGN(4) {
+    .data.cli_cmds : ALIGN(4) {
         __start_cli_cmds = .;
-        KEEP(*(.cli_cmds))
+        KEEP(*(.data.cli_cmds))
         __stop_cli_cmds = .;
     }
 
-    .init_calls : ALIGN(4) {
+    .data.init_calls : ALIGN(4) {
         __start_init_calls = .;
-        KEEP(*(.init_calls))
+        KEEP(*(.data.init_calls))
         __stop_init_calls = .;
     }
 } INSERT AFTER .data;
-

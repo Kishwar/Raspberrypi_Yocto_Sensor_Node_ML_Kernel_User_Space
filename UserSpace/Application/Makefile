@@ -20,15 +20,15 @@ INCLUDES := $(foreach dir,$(INC_DIRS),-I$(dir))
 
 # Compiler and flags (use Yocto's environment if set)
 CXX ?= $(CROSS_COMPILE)g++
-CXXFLAGS := -Wall -Os -fdata-sections -ffunction-sections -Wl,--gc-sections -std=c++17 $(INCLUDES)
-LDFLAGS := -static-libstdc++ -static-libgcc -pthread
+CXXFLAGS := -Wall -Os -fdata-sections -ffunction-sections -std=c++17 -fno-lto $(INCLUDES)
+LDFLAGS := -static-libstdc++ -static-libgcc -pthread -Wl,--gc-sections
 
 # Map file
 MAPFILE = mapfile.map
 LDFLAGS += -Wl,-Map=$(MAPFILE)
 
 # Linkerset
-LDFLAGS += -Wl,--script=linkerset.ld
+LDFLAGS += -Wl,-Tlinkerset.ld
 
 .PHONY: all clean info
 

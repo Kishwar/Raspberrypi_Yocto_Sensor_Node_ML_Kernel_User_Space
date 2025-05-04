@@ -16,16 +16,19 @@
  *  @note       This code is not open source. Unauthorized use is not permitted.
  ******************************************************************************/
 
-#ifndef _AUTOINIT_HPP_
-#define _AUTOINIT_HPP_
-
-using InitFunc = void (*)();
-
-#define INIT_SECTION __attribute__((section("init_calls")))
-#define REGISTER_AUTO_INIT(ClassName)                                                                       \
-    static void __##ClassName##_initCaller() {                                                              \
-        ClassName::getInstance();                                                                           \
-    }                                                                                                       \
-    static InitFunc __init_##ClassName INIT_SECTION __attribute__((used)) = __##ClassName##_initCaller;     \
-
-#endif // _AUTOINIT_HPP_
+ #ifndef _AUTOINIT_HPP_
+ #define _AUTOINIT_HPP_
+ 
+ using InitFunc = void (*)();
+ 
+ #define INIT_SECTION __attribute__((section(".data.init_calls"), used))
+ #define USED_ATTR __attribute__((used))
+ 
+ #define REGISTER_AUTO_INIT(ClassName)                                                          \
+     static void __##ClassName##_initCaller() USED_ATTR;                                        \
+     static void __##ClassName##_initCaller() {                                                 \
+         ClassName::getInstance();                                                              \
+     }                                                                                          \
+     static InitFunc __init_##ClassName INIT_SECTION USED_ATTR = __##ClassName##_initCaller;    \
+ 
+ #endif // _AUTOINIT_HPP_
