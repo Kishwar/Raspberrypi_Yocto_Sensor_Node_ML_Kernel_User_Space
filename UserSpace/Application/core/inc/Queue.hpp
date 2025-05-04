@@ -41,12 +41,18 @@ public:
         cond_.notify_one();
     }
 
+    void send(T&& item) {
+        std::lock_guard<std::mutex> lock(mutex_);
+        queue_.push(std::move(item));
+        cond_.notify_one();
+    }
+
     T receive() {
         std::unique_lock<std::mutex> lock(mutex_);
         cond_.wait(lock, [&] {
                                 return !queue_.empty();
                              });
-        T item = queue_.front();
+        T item = std::move(queue_.front());
         queue_.pop();
         return item;
     }

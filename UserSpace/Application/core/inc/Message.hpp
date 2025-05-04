@@ -24,21 +24,28 @@
 #include <memory>
 #include <chrono>
 
+#include "Queue.hpp"
+
 enum class Priority {
     LOW, MEDIUM, HIGH
 };
 
 template <typename T>
 struct Message {
-    Queue<Message<T>>* senderQueue;                     // So receiver can send a reply
+    std::shared_ptr<Queue<Message<T>>> senderQueue;     // So receiver can send a reply
     Priority priority;                                  // Optional message priority
     std::unique_ptr<T> data;                            // Auto-cleared after processing
     std::chrono::steady_clock::time_point timestamp;    // time stamp
 
-    Message(Message<Queue<T>>* sender, Priority prio, std::unique_ptr<T> payload) : senderQueue(sender),
-                                                                                    priority(prio),
-                                                                                    data(payload),
-                                                                                    timestamp(std::chrono::steady_clock::now()) {
+    Message(std::shared_ptr<Queue<Message<T>>> sender,
+            Priority prio, std::unique_ptr<T> payload) : senderQueue(std::move(sender)),
+                                                         priority(prio),
+                                                         data(std::move(payload)),
+                                                         timestamp(std::chrono::steady_clock::now()) {
+    }
+
+    T extractPayload() const {
+        return *data;
     }
 
     // Move-only: to preserve unique_ptr semantics

@@ -17,13 +17,14 @@
  ******************************************************************************/
 
 #include "Logging.hpp"
+#include "Message.hpp"
 
 #include <iostream>
 #include <algorithm>
 
 Logging::Logging() : TelnetServer(PORT),
                      level_(Level::INFO),
-                     queue_(std::make_unique<Queue<std::string>>()) {
+                     queue_(std::make_shared<Queue<Message<std::string>>>()) {
 }
 
 void Logging::log(const Level level, const std::string &content) {
@@ -68,7 +69,8 @@ void Logging::log(const Level level, const std::string &content) {
     oss << "\r" << color << label << " " << content << "\033[0m" << "\r" << std::endl;
 
     // log on socket interface
-    queue_->send(oss.str());
+    auto message = Message<std::string>(queue_, Priority::HIGH, std::make_unique<std::string>(oss.str()));
+    queue_->send(std::move(message));
 }
 
 Codes Logging::setLevel(const std::vector<std::string>& args) {
@@ -127,7 +129,8 @@ Codes Logging::getLevel(std::string& data) {
 
 void Logging::write() {
     while(true) {
-        std::string val = queue_->receive();
+        auto message = queue_->receive();
+        std::string val = message.extractPayload();
         sockWrite(val);
     }
 }

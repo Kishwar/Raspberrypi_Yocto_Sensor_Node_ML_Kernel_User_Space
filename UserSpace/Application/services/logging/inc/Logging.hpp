@@ -24,6 +24,7 @@
 #include "Queue.hpp"
 #include "AutoInit.hpp"
 #include "CliCommand.hpp"
+#include "Message.hpp"
 
 #include <string>
 #include <sstream>
@@ -50,7 +51,7 @@ public:
 
 private:
     Level level_;
-    std::unique_ptr<Queue<std::string>> queue_;
+    std::shared_ptr<Queue<Message<std::string>>> queue_;
     static constexpr uint16_t PORT = 24;
 
     Logging();
