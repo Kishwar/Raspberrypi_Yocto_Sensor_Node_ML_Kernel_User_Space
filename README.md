@@ -70,7 +70,7 @@ root@raspberrypi3:/home# ls -la application
 ```
 ## Step.2: Create a service file
 ```bash
-sudo nano /etc/systemd/system/myapp.service
+/etc/systemd/system/EmbeddedApp.service
 ```
 
 ## Step.3: Paste this in file above
