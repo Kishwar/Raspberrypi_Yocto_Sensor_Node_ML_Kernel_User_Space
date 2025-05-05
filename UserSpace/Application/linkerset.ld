@@ -32,4 +32,11 @@ SECTIONS {
         KEEP(*(.init_calls))
         __stop_init_calls = .;
     }
-} INSERT AFTER .data;
+
+    .queue_registry : ALIGN(4) {
+        __start_queue_registry = .;
+        KEEP(*(.queue_registry))
+        __stop_queue_registry = .;
+    }
+}
+INSERT AFTER .data;
