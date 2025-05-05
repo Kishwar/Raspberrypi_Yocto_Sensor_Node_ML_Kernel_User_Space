@@ -13,9 +13,6 @@
 # *  @author     Kishwar Kumar
 # *  @version    1.0
 # *
-# *  @note       This script defines sorted sections (.cli_cmds and .init_calls)
-# *              to be used with GCC's linkersets. It is intended for use in
-# *              embedded systems such as Yocto-based Linux on Raspberry Pi.
 # ***********************************************************************************/
 
 [Unit]

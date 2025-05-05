@@ -2,15 +2,16 @@
 TARGET = application
 
 # Source and include directories
-SRC_DIRS := ./main/src ./core/src ./services/cli/src \
-            ./services/regression/src ./services/telnet/src \
-            ./services/logging/src
+SRC_DIRS := ./main/src ./core/src ./services/cli/src                      \
+            ./services/regression/src ./services/telnet/src               \
+            ./services/logging/src ./services/fileio/src
 
-INC_DIRS := ./main/inc ./core/inc ./services/cli/inc \
-            ./services/regression/inc ./services/telnet/inc \
-            ./core/interface ./services/cli/interface \
-            ./services/regression/interface ./services/telnet/interface \
-            ./services/logging/inc ./services/logging/interface
+INC_DIRS := ./main/inc ./core/inc ./services/cli/inc                      \
+            ./services/regression/inc ./services/telnet/inc               \
+            ./core/interface ./services/cli/interface                     \
+            ./services/regression/interface ./services/telnet/interface   \
+            ./services/logging/inc ./services/logging/interface           \
+            ./services/fileio/inc ./services/fileio/interface
 
 # Find all .cpp files recursively in SRC_DIRS
 SRC := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.cpp))
