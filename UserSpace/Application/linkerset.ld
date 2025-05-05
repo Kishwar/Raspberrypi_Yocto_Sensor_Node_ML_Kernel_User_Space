@@ -1,8 +1,7 @@
 /***********************************************************************************
  *  @file       linkerset.ld
- *  @brief      Linker script to define sorted linkerset sections for
- *              applications and auto-initializer registration on embedded
- *              Linux systems.
+ *  @brief      Linker script to define linkerset sections for application
+ *              running on embedded Linux systems.
  *
  *  @copyright  Copyright (c) 2025 Kishwar Kumar
  *              All rights reserved.
@@ -15,9 +14,9 @@
  *  @author     Kishwar Kumar
  *  @version    1.0
  *
- *  @note       This script defines sorted sections (.cli_cmds and .init_calls)
- *              to be used with GCC's linkersets. It is intended for use in
- *              embedded systems such as Yocto-based Linux on Raspberry Pi.
+ *  @note       This script defines sorted sections (.cli_cmds, .init_calls, ...)
+ *              to be used with GCC's linkersets. It is intended for use in embedded
+ *              systems such as Yocto-based Linux on Raspberry Pi.
  ***********************************************************************************/
 
 SECTIONS {
