@@ -100,8 +100,21 @@ systemctl start EmbeddedApp.service
 
 ## Step.5: Now it will auto-run on every boot! (To check its status or logs)
 ```bash
-systemctl status EmbeddedApp.service
-journalctl -u EmbeddedApp.service
+root@raspberrypi3:~# systemctl status EmbeddedApp.service
+● EmbeddedApp.service - EmbeddedApp
+     Loaded: loaded (/etc/systemd/system/EmbeddedApp.service; enabled; vendor preset: disabled)
+     Active: active (running) since Mon 2025-05-05 17:59:17 UTC; 1min 25s ago
+   Main PID: 166 (application)
+      Tasks: 3 (limit: 1596)
+     CGroup: /system.slice/EmbeddedApp.service
+             └─ 166 /home/application
+
+May 05 17:59:17 raspberrypi3 systemd[1]: Started EmbeddedApp.
+```
+
+```bash
+root@raspberrypi3:~# journalctl -u EmbeddedApp.service
+May 05 17:59:17 raspberrypi3 systemd[1]: Started EmbeddedApp.
 ```
 
 # Plug Kernel Module (.ko) to systemd for auto-reload
