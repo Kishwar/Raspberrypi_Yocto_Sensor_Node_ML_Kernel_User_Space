@@ -21,7 +21,7 @@
  
  using InitFunc = void (*)();
  
- #define INIT_SECTION __attribute__((section(".data.init_calls"), used))
+ #define INIT_SECTION __attribute__((section(".init_calls"), used))
  #define USED_ATTR __attribute__((used))
  
  #define REGISTER_AUTO_INIT(ClassName)                                                          \

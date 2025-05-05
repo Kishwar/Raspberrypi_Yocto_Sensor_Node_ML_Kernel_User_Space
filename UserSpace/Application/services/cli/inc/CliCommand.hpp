@@ -30,7 +30,7 @@ struct CliCommand {
     Codes (*read)(std::string& data);
 };
 
-#define CLI_SECTION __attribute__((section(".data.cli_cmds"), used))
+#define CLI_SECTION __attribute__((section(".cli_cmds"), used))
 #define USED_ATTR __attribute__((used))
 
 #define CLI_COMMAND_WRITE(name, ClassName, WriteMethod)                                                         \

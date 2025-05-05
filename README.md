@@ -82,8 +82,11 @@ After=network.target
 [Service]
 ExecStart=/home/application
 Restart=on-failure
-User=pi
+User=root
 WorkingDirectory=/home
+RestartSec=3
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 WantedBy=multi-user.target
@@ -91,16 +94,14 @@ WantedBy=multi-user.target
 
 ## Step.4: Reload systemd and enable it
 ```bash
-sudo systemctl daemon-reexec
-sudo systemctl daemon-reload
-sudo systemctl enable myapp.service
-sudo systemctl start myapp.service
+systemctl enable EmbeddedApp.service
+systemctl start EmbeddedApp.service
 ```
 
 ## Step.5: Now it will auto-run on every boot! (To check its status or logs)
 ```bash
-sudo systemctl status myapp.service
-journalctl -u myapp.service
+systemctl status EmbeddedApp.service
+journalctl -u EmbeddedApp.service
 ```
 
 # Plug Kernel Module (.ko) to systemd for auto-reload
