@@ -119,7 +119,8 @@ bitbake virtual/kernel -c devshell
 ### Step 1: Move the Binary
 
 ```bash
-cp build/binaries/EmbeddedApp /home/EmbeddedApp
+scp build/binaries/EmbeddedApp <root>@<192.168.178.98>:/home/
+ssh <root>@<192.168.178.98>
 chmod +x /home/EmbeddedApp
 ```
 
