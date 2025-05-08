@@ -1,4 +1,3 @@
-#include "Cli.hpp"
 /******************************************************************************
  *  @file       Cli.cpp
  *  @brief      Implements CLI service runs over telnet

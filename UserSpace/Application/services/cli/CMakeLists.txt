@@ -1,0 +1,34 @@
+################################################################################
+# @brief      CMake build configuration file.
+#
+#             This file defines how the current module is built using CMake.
+#             It is part of the UserSpace application.
+#
+# @license    This project is publicly available on GitHub for viewing and
+#             educational/reference purposes only. Redistribution, modification,
+#             or commercial use of any portion of this code is strictly
+#             prohibited without prior written permission from the author.
+#
+# @author     Kishwar Kumar
+# @version    1.0
+#
+# @note       This code is not open source. Unauthorized use is not permitted.
+################################################################################
+
+file(GLOB_RECURSE CLI_SRC CONFIGURE_DEPENDS src/*.cpp)
+add_library(services_cli ${CLI_SRC})
+
+target_include_directories(services_cli PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc
+    ${CMAKE_CURRENT_SOURCE_DIR}/interface
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../main/inc  # <-- move this to core (AutoInit.hpp)
+
+
+    # line below will be removed (todo)
+    ${CMAKE_CURRENT_SOURCE_DIR}/../telnet/inc
+    ${CMAKE_CURRENT_SOURCE_DIR}/../telnet/interface
+    ${CMAKE_CURRENT_SOURCE_DIR}/../logging/inc
+    ${CMAKE_CURRENT_SOURCE_DIR}/../logging/interface
+)
+
+target_link_libraries(services_cli core services_telnet services_logging)
