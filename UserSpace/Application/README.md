@@ -1,4 +1,4 @@
-# Raspberrypi_Yocto_Sensor_Node_ML_Kernel_User_Space
+# Raspberrypi_Yocto_Sensor_Node_ML_User_Space
 The project uses **Linkersets** to manage modular initialization with high flexibility and complexity.
 -  All modules registered via linkersets are automatically started during system initialization.
     ```bash
