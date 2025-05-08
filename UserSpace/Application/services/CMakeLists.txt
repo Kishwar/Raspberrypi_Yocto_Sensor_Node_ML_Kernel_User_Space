@@ -26,3 +26,6 @@ endforeach()
 # Create a single interface to aggregate them
 add_library(services INTERFACE)
 target_link_libraries(services INTERFACE ${SERVICE_LIBS})
+
+# Make the list available to the parent scope (main/CMakeLists.txt)
+set(LINKERSET_LIBS ${SERVICE_LIBS} PARENT_SCOPE)

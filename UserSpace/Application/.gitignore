@@ -15,6 +15,7 @@ Makefile
 *.o
 *.so
 *.d
+application
 
 # IDE/project files
 *.swp
