@@ -1,0 +1,28 @@
+# CMake build directories
+build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Output binaries and maps
+*.map
+*.elf
+*.bin
+*.hex
+*.out
+*.a
+*.o
+*.so
+*.d
+
+# IDE/project files
+*.swp
+*.swo
+*.DS_Store
+.vscode/
+.idea/
+
+# User-specific files
+*.log
+*.tmp
