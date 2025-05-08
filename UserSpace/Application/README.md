@@ -26,7 +26,7 @@ Each CLI command is modular and registered independently, enabling runtime disco
 
 ```cpp
 /* Register CLI command with linker set */
-CLI_COMMAND_REGISTER_BOTH("loglevel", Logging, setLevel, getLevel);
+REGISTER_CLI_COMMAND_BOTH("loglevel", Logging, setLevel, getLevel);
 ```
 
 ### 📬 Cross-Module Queue Discovery

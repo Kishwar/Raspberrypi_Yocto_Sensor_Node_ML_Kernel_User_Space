@@ -34,11 +34,11 @@ This image outlines the architecture of the user-space application:
 
 ## ⚙️ What are Linker Sets?
 
-**Linker sets** allow components to register themselves dynamically at runtime:
+**Linker sets** allow components to register themselves at link time, enabling automatic discovery and activation at runtime. This approach eliminates the need for manual initialization lists and supports a highly modular system.
 
 ```cpp
 REGISTER_AUTO_INIT(CLI)                                            // Register class for startup
-CLI_COMMAND_REGISTER_BOTH("loglevel", Logging, setLevel, getLevel) // Register CLI command
+REGISTER_CLI_COMMAND_BOTH("loglevel", Logging, setLevel, getLevel) // Register CLI command
 REGISTER_QUEUE("TELNET_Q", Queue<>)                                // Register queue
 ```
 

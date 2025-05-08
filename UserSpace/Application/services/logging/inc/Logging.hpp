@@ -80,7 +80,7 @@ private:
     } while (0)
 
 /* register CLI command with linkerset */
-CLI_COMMAND_REGISTER_BOTH("loglevel", Logging, setLevel, getLevel);
+REGISTER_CLI_COMMAND_BOTH("loglevel", Logging, setLevel, getLevel);
 
 /* register class to be auto-activated at startup (linkerset) */
 REGISTER_AUTO_INIT(Logging)

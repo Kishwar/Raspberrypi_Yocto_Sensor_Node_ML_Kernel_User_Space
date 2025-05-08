@@ -33,7 +33,7 @@ struct CliCommand {
 #define CLI_SECTION __attribute__((section(".cli_cmds"), used))
 #define USED_ATTR __attribute__((used))
 
-#define CLI_COMMAND_WRITE(name, ClassName, WriteMethod)                                                         \
+#define REGISTER_CLI_COMMAND_WRITE(name, ClassName, WriteMethod)                                                \
     static Codes __##ClassName##_##WriteMethod##_trampoline(const std::vector<std::string>& args) USED_ATTR;    \
     static Codes __##ClassName##_##WriteMethod##_trampoline(const std::vector<std::string>& args) {             \
         return ClassName::getInstance().WriteMethod(args);                                                      \
@@ -42,7 +42,7 @@ struct CliCommand {
         name, __##ClassName##_##WriteMethod##_trampoline, nullptr                                               \
     }                                                                                                           \
 
-#define CLI_COMMAND_READ(name, ClassName, ReadMethod)                                                           \
+#define REGISTER_CLI_COMMAND_READ(name, ClassName, ReadMethod)                                                  \
     static Codes __##ClassName##_##ReadMethod##_trampoline(std::string& data) USED_ATTR;                        \
     static Codes __##ClassName##_##ReadMethod##_trampoline(std::string& data) {                                 \
         return ClassName::getInstance().ReadMethod(data);                                                       \
@@ -51,7 +51,7 @@ struct CliCommand {
         name, nullptr, __##ClassName##_##ReadMethod##_trampoline                                                \
     }                                                                                                           \
 
-#define CLI_COMMAND_REGISTER_BOTH(name, ClassName, WriteMethod, ReadMethod)                                     \
+#define REGISTER_CLI_COMMAND_BOTH(name, ClassName, WriteMethod, ReadMethod)                                     \
     static Codes __##ClassName##_##WriteMethod##_trampoline(const std::vector<std::string>& args) USED_ATTR;    \
     static Codes __##ClassName##_##ReadMethod##_trampoline(std::string& data) USED_ATTR;                        \
     static Codes __##ClassName##_##WriteMethod##_trampoline(const std::vector<std::string>& args) {             \
