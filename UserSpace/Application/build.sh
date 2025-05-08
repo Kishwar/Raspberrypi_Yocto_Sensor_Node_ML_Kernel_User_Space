@@ -15,13 +15,26 @@
 # @note       This code is not open source. Unauthorized use is not permitted.
 ################################################################################
 
-# 1. Clean or create a build folder if needed
+#!/bin/bash
+
+# Check for optional --verbose argument
+if [[ "$1" == "--verbose" ]]; then
+    VERBOSE_FLAG="--verbose"
+    VERBOSE_CMAKE="-DCMAKE_VERBOSE_MAKEFILE=ON"
+    echo "🔧 Building with verbose output..."
+else
+    VERBOSE_FLAG=""
+    VERBOSE_CMAKE=""
+    echo "🔧 Building (quiet mode)..."
+fi
+
+# 1. Clean or create build directory
 rm -rf build
 mkdir build
-cd build
+cd build || exit 1
 
 # 2. Configure the build system
-cmake .. -DCMAKE_VERBOSE_MAKEFILE=ON
+cmake .. ${VERBOSE_CMAKE}
 
-# 3. Now build with full verbosity
-cmake --build . --verbose
+# 3. Build
+cmake --build . ${VERBOSE_FLAG}
