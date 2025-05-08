@@ -1,86 +1,163 @@
-# Raspberrypi_Yocto_Sensor_Node_ML_Kernel_User_Space
-The project uses **Linkersets** to manage modular initialization with high flexibility and complexity.
--  All modules registered via linkersets are automatically started during system initialization.
-    ```bash
-        /* register class to be auto-activated at startup (linkerset) */
-        REGISTER_AUTO_INIT(CLI)
-    ```
--  All CLI commands are also registered using linkersets, enabling dynamic command discovery and modular CLI handling.
-    ```
-        /* register CLI command with linkerset */
-        CLI_COMMAND_REGISTER_BOTH("loglevel", Logging, setLevel, getLevel);
-    ```
+# Raspberry Pi Sensor Node with ML – Kernel & User Space Integration
 
-In this project, I will develop following things.
--  Kernel device drivers for OLED connected with I2C
--  Kernel device drivers for OLED connected with SPI
--  Kernel device drivers for BME280 connected with SPI
--  User Application (Layered designed with C++17)
-    - Read sensor data
-    - Write it on Displays together with realtime clock
-    - Send data to AWS server
-    - Run AI Linear regression model on temprature / pressure / humidity (Edge processing)
- 
-# Hardware
-![devshell](RapberryPi_Sensors_OLED_Ethernet.jpeg)
+This repository provides a modular embedded system targeting Raspberry Pi, combining:
 
-# Application
-![devshell](Application_Overview.jpg)
+- 🧠 **Machine Learning inference in user space**
+- 📡 **Custom kernel modules for sensor drivers**
+- 🧩 **Modular services with linker set-based registration**
+- 🛠️ **Yocto-based SDK for cross-compilation**
 
-# Create SDK to build application for Raspberrypi running yocto
-Add following lines to kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi/conf$ nano local.conf
+---
+
+## 🔧 Hardware Overview
+
+![Hardware Setup](RapberryPi_Sensors_OLED_Ethernet.jpeg)
+
+This setup includes various sensors connected to Raspberry Pi via GPIO/I2C/SPI and an OLED display. The system is designed for real-time data acquisition, processing, and control in embedded environments.
+
+---
+
+## 🧠 Application Architecture
+
+![Application Overview](Application_Overview.jpg)
+
+- Kernel drivers collect raw sensor data
+- User-space application processes and routes data
+- CLI, Telnet, Logging, and ML inference modules interact via queues
+- Services auto-register via **linker sets**
+
+---
+
+## 📂 Project Structure
+
+```
+.
+├── KernelSpace/Drivers            # Linux kernel modules for various physical sensors
+├── UserSpace/Application          # User space application with various services
+└── README.md
+```
+
+---
+
+## ⚙️ What are Linker Sets?
+
+**Linker sets** allow components to register themselves dynamically at runtime:
+
+```cpp
+REGISTER_AUTO_INIT(CLI)                                            // Register class for startup
+CLI_COMMAND_REGISTER_BOTH("loglevel", Logging, setLevel, getLevel) // Register CLI command
+REGISTER_QUEUE("TELNET_Q", Queue<>)                                // Register queue
+```
+
+This modular design avoids centralized registration, improves scalability, and simplifies extension.
+
+---
+
+## 🧰 Create Yocto SDK
+
+On your Yocto build machine:
+
 ```bash
+# nano embd_linux/build_pi/conf/local.conf
 PACKAGECONFIG:append:pn-gcc-runtime = " static-libstdc++"
 DISTRO_FEATURES:append = " staticdev"
 SDKIMAGE_FEATURES:append = " staticdev-pkgs"
 ```
-
-Run following commands
 ```bash
-kkumar@DESKTOP-NK9HSKR:~/embd_linux$ source poky/oe-init-build-env build_pi
-kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi$ bitbake -c cleansstate gcc-runtime
-kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi$ bitbake gcc-runtime
-kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi$ bitbake core-image-minimal -c populate_sdk
-```
-```bash
-kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi$ source /opt/poky/4.0.21/environment-setup-cortexa7t2hf-neon-vfpv4-poky-linux-gnueabi
-kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi$ cd tmp/deploy/sdk/
-kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi/tmp/deploy/sdk$ ./poky-glibc-x86_64-core-image-minimal-cortexa7t2hf-neon-vfpv4-raspberrypi3-toolchain-4.0.21.sh
-kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi/tmp/deploy/sdk$ . /opt/poky/4.0.21/environment-setup-cortexa7t2hf-neon-vfpv4-poky-linux-gnueabi
+# cd ~/embd_linux
+source poky/oe-init-build-env build_pi
+bitbake -c cleansstate gcc-runtime
+bitbake gcc-runtime
+bitbake core-image-minimal -c populate_sdk
 ```
 
-# Build Application
+This will generate a `.sh` installer:
+
 ```bash
-kkumar@DESKTOP-NK9HSKR:~/Raspberrypi_Yocto_Sensor_Node_ML_Kernel_User_Space/UserSpace/Application$ source /opt/poky/4.0.21/environment-setup-cortexa7t2hf-neon-vfpv4-poky-linux-gnueabi
-kkumar@DESKTOP-NK9HSKR:~/Raspberrypi_Yocto_Sensor_Node_ML_Kernel_User_Space/UserSpace/Application$ make
+# poky-glibc-x86_64-core-image-minimal-cortexa7t2hf-neon-vfpv4-raspberrypi3-toolchain-4.0.21.sh
+tmp/deploy/sdk/poky-glibc-x86_64-<sdkname>-armv7at2hf-neon-toolchain-*.sh
 ```
 
-# Build Kernel Module
+Then on your dev system:
+
 ```bash
-kkumar@DESKTOP-NK9HSKR:~/embd_linux$ source poky/oe-init-build-env build_pi
-kkumar@DESKTOP-NK9HSKR:~/embd_linux/build_pi$ bitbake virtual/kernel -c devshell
+# cd tmp/deploy/sdk
+chmod +x poky-*.sh
+./poky-*.sh
 ```
 
-# Plug Application to systemd for auto-reload
+Source the environment to use it:
 
-## Step.1: Binaries path
 ```bash
-root@raspberrypi3:/home# ls -la application 
--rwxr-xr-x    1 root     root        298292 Apr 21 10:56 application
-```
-## Step.2: Create a service file
-```bash
-/etc/systemd/system/EmbeddedApp.service
+source /opt/poky/4.0.21/environment-setup-cortexa7t2hf-neon-vfpv4-poky-linux-gnueabi
 ```
 
-## Step.3: Paste this in file above
+---
+
+## 🧠 Application Architecture
+
+![Application Overview](Application_Overview.jpg)
+
+This image outlines the architecture of the user-space application:
+- Data flows from kernel drivers into queues
+- Services (CLI, Telnet, Logging, etc.) communicate via queues
+- ML model is integrated as a self-contained module
+- All components register dynamically via linker sets
+
+
+---
+
+## 🧪 Build User Space Application
+
 ```bash
+cd UserSpace/Application
+mkdir build && cd build
+cmake ..
+make -j$(nproc)
+```
+
+The output binary will be:
+
+```
+build/binaries/EmbeddedApp
+```
+
+---
+
+## 🧱 Build Kernel Modules
+
+```bash
+cd KernelSpace/
+source poky/oe-init-build-env build_pi
+bitbake virtual/kernel -c devshell
+```
+
+---
+
+## 🔄 Deploy with systemd
+
+### Step 1: Move the Binary
+
+```bash
+cp build/binaries/EmbeddedApp /home/EmbeddedApp
+chmod +x /home/EmbeddedApp
+```
+
+### Step 2: Create a systemd Service
+
+```bash
+sudo nano /etc/systemd/system/EmbeddedApp.service
+```
+
+Paste:
+
+```ini
 [Unit]
 Description=EmbeddedApp
 After=network.target
 
 [Service]
-ExecStart=/home/application
+ExecStart=/home/EmbeddedApp
 Restart=on-failure
 User=root
 WorkingDirectory=/home
@@ -92,67 +169,26 @@ StandardError=journal
 WantedBy=multi-user.target
 ```
 
-## Step.4: Reload systemd and enable it
-```bash
-systemctl enable EmbeddedApp.service
-systemctl start EmbeddedApp.service
-```
-
-## Step.5: Now it will auto-run on every boot! (To check its status or logs)
-```bash
-root@raspberrypi3:~# systemctl status EmbeddedApp.service
-● EmbeddedApp.service - EmbeddedApp
-     Loaded: loaded (/etc/systemd/system/EmbeddedApp.service; enabled; vendor preset: disabled)
-     Active: active (running) since Mon 2025-05-05 17:59:17 UTC; 1min 25s ago
-   Main PID: 166 (application)
-      Tasks: 3 (limit: 1596)
-     CGroup: /system.slice/EmbeddedApp.service
-             └─ 166 /home/application
-
-May 05 17:59:17 raspberrypi3 systemd[1]: Started EmbeddedApp.
-```
+### Step 3: Reload and Enable
 
 ```bash
-root@raspberrypi3:~# journalctl -u EmbeddedApp.service
-May 05 17:59:17 raspberrypi3 systemd[1]: Started EmbeddedApp.
+[sudo] systemctl enable EmbeddedApp.service
+[sudo] systemctl start EmbeddedApp.service
 ```
 
-# Plug Kernel Module (.ko) to systemd for auto-reload
+### Step 4: Monitor
 
-## Step.1: Create service file
 ```bash
-sudo nano /etc/systemd/system/mydrivers.service
+systemctl status EmbeddedApp.service
+journalctl -u EmbeddedApp.service
 ```
 
-## Step.2: Paste this in file above
-```bash
-# /etc/systemd/system/mydrivers.service
-[Unit]
-Description=Load custom kernel module
-Before=multi-user.target
+---
 
-[Service]
-Type=oneshot
-ExecStart=/sbin/modprobe mydrivers
-RemainAfterExit=yes
+## 📄 License
 
-[Install]
-WantedBy=multi-user.target
-```
+This project is provided for **educational and reference purposes only**.
 
-## Step.3: Reload systemd and enable it
-```bash
-sudo systemctl daemon-reload
-sudo systemctl enable mydrivers
-sudo systemctl start mydrivers
-```
+> Redistribution, modification, or commercial use is **strictly prohibited** without prior written permission.
 
-## Step.4: Now it will auto-reload on every boot! (To check its status or logs)
-```bash
-lsmod | grep mydrivers
-# OR
-dmesg | grep mydrivers
-```
-
-
-
+© 2025 Kishwar Kumar – All rights reserved.
