@@ -123,10 +123,8 @@ WantedBy=multi-user.target
 ### Step 3: Enable & Start the Service
 
 ```bash
-sudo systemctl daemon-reexec
-sudo systemctl daemon-reload
-sudo systemctl enable EmbeddedApp.service
-sudo systemctl start EmbeddedApp.service
+[sudo] systemctl enable EmbeddedApp.service
+[sudo] systemctl start EmbeddedApp.service
 ```
 
 ### Step 4: Check Status and Logs

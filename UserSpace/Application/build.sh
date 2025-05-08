@@ -1,5 +1,5 @@
 ################################################################################
-# @brief      CMake build configuration file.
+# @brief      Build Script to build firmware using CMake
 #
 #             This file defines how the current module is built using CMake.
 #             It is part of the UserSpace application.
@@ -15,23 +15,26 @@
 # @note       This code is not open source. Unauthorized use is not permitted.
 ################################################################################
 
-cmake_minimum_required(VERSION 3.14)
-project(EmbeddedApp)
+#!/bin/bash
 
-# Use C++17 and global settings
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+# Check for optional --verbose argument
+if [[ "$1" == "--verbose" ]]; then
+    VERBOSE_FLAG="--verbose"
+    VERBOSE_CMAKE="-DCMAKE_VERBOSE_MAKEFILE=ON"
+    echo "🔧 Building with verbose output..."
+else
+    VERBOSE_FLAG=""
+    VERBOSE_CMAKE=""
+    echo "🔧 Building (quiet mode)..."
+fi
 
-# Debug info: print selected toolchain
-message(STATUS "C++ Compiler: ${CMAKE_CXX_COMPILER}")
-message(STATUS "System Name : ${CMAKE_SYSTEM_NAME}")
-message(STATUS "System Proc : ${CMAKE_SYSTEM_PROCESSOR}")
+# 1. Clean or create build directory
+rm -rf build
+mkdir build
+cd build || exit 1
 
-# Optional: treat warnings as errors globally
-add_compile_options(-Wall -Werror)
+# 2. Configure the build system
+cmake .. ${VERBOSE_CMAKE}
 
-# Add subdirectories
-add_subdirectory(core)
-add_subdirectory(services)
-add_subdirectory(main)
+# 3. Build
+cmake --build . ${VERBOSE_FLAG}

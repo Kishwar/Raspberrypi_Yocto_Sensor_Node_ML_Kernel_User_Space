@@ -16,13 +16,38 @@
 ################################################################################
 
 file(GLOB_RECURSE MAIN_SRC CONFIGURE_DEPENDS src/*.cpp)
+
 add_executable(EmbeddedApp ${MAIN_SRC})
 
-target_include_directories(EmbeddedApp PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/inc)
+# Include all required headers
+target_include_directories(EmbeddedApp PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc
+    ${CMAKE_SOURCE_DIR}/core/inc
+    ${CMAKE_SOURCE_DIR}/core/interface
+    ${CMAKE_SOURCE_DIR}/services/cli/inc
+    ${CMAKE_SOURCE_DIR}/services/cli/interface
+    ${CMAKE_SOURCE_DIR}/services/regression/inc
+    ${CMAKE_SOURCE_DIR}/services/regression/interface
+    ${CMAKE_SOURCE_DIR}/services/telnet/inc
+    ${CMAKE_SOURCE_DIR}/services/telnet/interface
+    ${CMAKE_SOURCE_DIR}/services/logging/inc
+    ${CMAKE_SOURCE_DIR}/services/logging/interface
+    ${CMAKE_SOURCE_DIR}/services/fileio/inc
+    ${CMAKE_SOURCE_DIR}/services/fileio/interface
+)
 
-target_link_libraries(EmbeddedApp core services)
+# Ensure these libraries are passed directly inside --whole-archive block
+set(linkerset_static_libs "")
+foreach(lib ${LINKERSET_LIBS})
+    list(APPEND linkerset_static_libs "-Wl,--whole-archive" ${lib} "-Wl,--no-whole-archive")
+endforeach()
 
-# Compiler flags (Yocto-safe)
+target_link_libraries(EmbeddedApp PRIVATE ${linkerset_static_libs})
+
+# Then link normally
+target_link_libraries(EmbeddedApp PRIVATE core services)
+
+# Compiler flags to match Makefile
 target_compile_options(EmbeddedApp PRIVATE
     -Wall
     -Os
@@ -30,6 +55,17 @@ target_compile_options(EmbeddedApp PRIVATE
     -ffunction-sections
     -std=c++17
     -fno-lto
+    -fstack-protector-strong
+    -O2
+    -D_FORTIFY_SOURCE=2
+    -Wformat
+    -Wformat-security
+    -Werror=format-security
+    -mthumb
+    -mfpu=neon-vfpv4
+    -mfloat-abi=hard
+    -mcpu=cortex-a7
+    --sysroot=/opt/poky/4.0.21/sysroots/cortexa7t2hf-neon-vfpv4-poky-linux-gnueabi
 )
 
 # Linker flags
@@ -40,15 +76,16 @@ target_link_options(EmbeddedApp PRIVATE
     -Wl,--gc-sections
     -Wl,-Map=${CMAKE_BINARY_DIR}/binaries/mapfile.map
     -Wl,-T${CMAKE_SOURCE_DIR}/linkerset.ld
+    --sysroot=/opt/poky/4.0.21/sysroots/cortexa7t2hf-neon-vfpv4-poky-linux-gnueabi
+)
+
+# Output binary directory
+set_target_properties(EmbeddedApp PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/binaries
 )
 
 # strip binary
 add_custom_command(TARGET EmbeddedApp POST_BUILD
-    COMMAND ${CMAKE_OBJCOPY} --strip-all ${CMAKE_BINARY_DIR}/binaries/EmbeddedApp
+    COMMAND ${CMAKE_OBJCOPY} --strip-debug ${CMAKE_BINARY_DIR}/binaries/EmbeddedApp
     COMMENT "Stripping final binary in /binaries"
-)
-
-# Set output binary directory
-set_target_properties(EmbeddedApp PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/binaries
 )
