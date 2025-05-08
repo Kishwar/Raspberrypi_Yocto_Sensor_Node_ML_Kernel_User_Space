@@ -19,7 +19,7 @@ Description=EmbeddedApp
 After=network.target
 
 [Service]
-ExecStart=/home/application
+ExecStart=/home/EmbeddedApp
 Restart=on-failure
 User=root
 WorkingDirectory=/home
