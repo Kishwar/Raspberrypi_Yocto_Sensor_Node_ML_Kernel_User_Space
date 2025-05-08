@@ -9,22 +9,15 @@ This repository provides a modular embedded system targeting Raspberry Pi, combi
 
 ---
 
-## 🔧 Hardware Overview
-
-![Hardware Setup](RapberryPi_Sensors_OLED_Ethernet.jpeg)
-
-This setup includes various sensors connected to Raspberry Pi via GPIO/I2C/SPI and an OLED display. The system is designed for real-time data acquisition, processing, and control in embedded environments.
-
----
-
 ## 🧠 Application Architecture
 
 ![Application Overview](Application_Overview.jpg)
 
-- Kernel drivers collect raw sensor data
-- User-space application processes and routes data
-- CLI, Telnet, Logging, and ML inference modules interact via queues
-- Services auto-register via **linker sets**
+This image outlines the architecture of the user-space application:
+- Data flows from kernel drivers into queues
+- Services (CLI, Telnet, Logging, etc.) communicate via queues
+- ML model is integrated as a self-contained module
+- All components register dynamically via **linker sets**
 
 ---
 
@@ -91,19 +84,6 @@ Source the environment to use it:
 ```bash
 source /opt/poky/4.0.21/environment-setup-cortexa7t2hf-neon-vfpv4-poky-linux-gnueabi
 ```
-
----
-
-## 🧠 Application Architecture
-
-![Application Overview](Application_Overview.jpg)
-
-This image outlines the architecture of the user-space application:
-- Data flows from kernel drivers into queues
-- Services (CLI, Telnet, Logging, etc.) communicate via queues
-- ML model is integrated as a self-contained module
-- All components register dynamically via linker sets
-
 
 ---
 
