@@ -21,7 +21,6 @@ add_executable(EmbeddedApp ${MAIN_SRC})
 
 # Include all required headers
 target_include_directories(EmbeddedApp PRIVATE
-    ${CMAKE_SOURCE_DIR}/core/inc
 )
 
 # Ensure these libraries are passed directly inside --whole-archive block
