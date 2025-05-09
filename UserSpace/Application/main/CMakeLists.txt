@@ -21,19 +21,7 @@ add_executable(EmbeddedApp ${MAIN_SRC})
 
 # Include all required headers
 target_include_directories(EmbeddedApp PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/inc
     ${CMAKE_SOURCE_DIR}/core/inc
-    ${CMAKE_SOURCE_DIR}/core/interface
-    ${CMAKE_SOURCE_DIR}/services/cli/inc
-    ${CMAKE_SOURCE_DIR}/services/cli/interface
-    ${CMAKE_SOURCE_DIR}/services/regression/inc
-    ${CMAKE_SOURCE_DIR}/services/regression/interface
-    ${CMAKE_SOURCE_DIR}/services/telnet/inc
-    ${CMAKE_SOURCE_DIR}/services/telnet/interface
-    ${CMAKE_SOURCE_DIR}/services/logging/inc
-    ${CMAKE_SOURCE_DIR}/services/logging/interface
-    ${CMAKE_SOURCE_DIR}/services/fileio/inc
-    ${CMAKE_SOURCE_DIR}/services/fileio/interface
 )
 
 # Ensure these libraries are passed directly inside --whole-archive block

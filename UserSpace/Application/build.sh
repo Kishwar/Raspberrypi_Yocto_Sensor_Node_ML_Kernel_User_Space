@@ -1,5 +1,6 @@
 ################################################################################
-# @brief      Build Script to build firmware using CMake
+# @file       build.sh
+# @brief      Shell script to build firmware using CMake
 #
 #             This file defines how the current module is built using CMake.
 #             It is part of the UserSpace application.
