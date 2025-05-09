@@ -1,6 +1,6 @@
 /******************************************************************************
- *  @file       CliErrorCodesIf.hpp
- *  @brief      Implements CLI service possible error codes
+ *  @file       ErrorCodes.hpp
+ *  @brief      Application Error Codes - Usable throughout application
  *
  *  @copyright  Copyright (c) 2025 Kishwar Kumar
  *              All rights reserved.
@@ -16,11 +16,11 @@
  *  @note       This code is not open source. Unauthorized use is not permitted.
  ******************************************************************************/
 
-#ifndef _CLI_ERROR_CODES_IF_HPP_
-#define _CLI_ERROR_CODES_IF_HPP_
+#ifndef _ERROR_CODES_HPP_
+#define _ERROR_CODES_HPP_
 
 enum class Codes {
     CODE_NO_ERROR, CODE_INVALID_PARAM, CODE_GENERIC_ERROR, CODE_MEMORY_FAILURE, CODE_NETWORK_ERROR, CODE_DISPLAY_ERROR
 };
 
-#endif // _CLI_ERROR_CODES_IF_HPP_
+#endif // _ERROR_CODES_HPP_

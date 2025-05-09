@@ -19,7 +19,7 @@
 #ifndef _CLI_COMMAND_HPP_
 #define _CLI_COMMAND_HPP_
 
-#include "CliErrorCodesIf.hpp"
+#include "ErrorCodes.hpp"
 
 #include <string>
 #include <vector>
