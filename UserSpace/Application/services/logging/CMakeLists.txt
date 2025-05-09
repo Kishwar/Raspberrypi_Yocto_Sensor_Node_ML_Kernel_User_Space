@@ -21,15 +21,8 @@ add_library(services_logging ${LOGGING_SRC})
 target_include_directories(services_logging PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/inc
     ${CMAKE_CURRENT_SOURCE_DIR}/interface
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../main/inc  # <-- move this to core (AutoInit.hpp)
-
-    # line below should be core (todo)
-    ${CMAKE_CURRENT_SOURCE_DIR}/../cli/inc
-    ${CMAKE_CURRENT_SOURCE_DIR}/../cli/interface
-    
-    # line below should be removed (todo)
-    ${CMAKE_CURRENT_SOURCE_DIR}/../telnet/inc
-    ${CMAKE_CURRENT_SOURCE_DIR}/../telnet/interface
 )
 
-target_link_libraries(services_logging core)
+target_link_libraries(services_logging
+                      core
+                      services_telnet)

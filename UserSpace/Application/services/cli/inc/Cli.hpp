@@ -19,7 +19,7 @@
 #ifndef _CLI_HPP_
 #define _CLI_HPP_
 
-#include "CliErrorCodesIf.hpp"
+#include "ErrorCodes.hpp"
 #include "TelnetServer.hpp"
 #include "AutoInit.hpp"
 #include "CliCommand.hpp"

@@ -19,7 +19,7 @@
 #ifndef _LOGGING_IF_HPP
 #define _LOGGING_IF_HPP
 
-#include "CliErrorCodesIf.hpp"
+#include "ErrorCodes.hpp"
 
 #include <string>
 #include <vector>
