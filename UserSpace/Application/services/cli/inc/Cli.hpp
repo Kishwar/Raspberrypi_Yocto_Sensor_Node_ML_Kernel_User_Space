@@ -23,7 +23,6 @@
 #include "TelnetServer.hpp"
 #include "Queue.hpp"
 #include "RegisterAutoInit.hpp"
-#include "RegisterCliCommand.hpp"
 #include "RegisterQueueHandle.hpp"
 
 #include <vector>

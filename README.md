@@ -37,9 +37,15 @@ This image outlines the architecture of the user-space application:
 **Linker sets** allow components to register themselves at link time, enabling automatic discovery and activation at runtime. This approach eliminates the need for manual initialization lists and supports a highly modular system.
 
 ```cpp
-REGISTER_AUTO_INIT(CLI)                                            // Register class for startup
-REGISTER_CLI_COMMAND_BOTH("loglevel", Logging, setLevel, getLevel) // Register CLI command
-REGISTER_QUEUE("TELNET_Q", Queue<>)                                // Register queue
+/* AutoInit registation */
+REGISTER_AUTO_INIT(CLI)                                             // Register class for startup
+
+/* Cli Command registation */
+REGISTER_CLI_COMMAND_BOTH("loglevel", Logging, setLevel, getLevel)  // Register CLI command
+
+/* Queue registation */
+DECLARE_QUEUE_FRIEND(Example, ExampleQ)                             // Declare friend
+REGISTER_PRIVATE_QUEUE(Example, ExampleQ, "ExampleQ")               // Register Q to be used by Example
 ```
 
 This modular design avoids centralized registration, improves scalability, and simplifies extension.
