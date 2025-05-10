@@ -1,5 +1,5 @@
 /******************************************************************************
- *  @file       CliCommand.hpp
+ *  @file       RegisterCliCommand.hpp
  *  @brief      Implements CLI command registeration linkerset
  *
  *  @copyright  Copyright (c) 2025 Kishwar Kumar
@@ -16,8 +16,8 @@
  *  @note       This code is not open source. Unauthorized use is not permitted.
  ******************************************************************************/
 
-#ifndef _CLI_COMMAND_HPP_
-#define _CLI_COMMAND_HPP_
+#ifndef _REGISTER_CLI_COMMAND_HPP_
+#define _REGISTER_CLI_COMMAND_HPP_
 
 #include "ErrorCodes.hpp"
 
@@ -64,4 +64,4 @@ struct CliCommand {
         name, __##ClassName##_##WriteMethod##_trampoline, __##ClassName##_##ReadMethod##_trampoline             \
     }                                                                                                           \
 
-#endif // _CLI_COMMAND_HPP_
+#endif // _REGISTER_CLI_COMMAND_HPP_

@@ -35,7 +35,21 @@ Modules can register their queues using linker sets, allowing other modules to d
 
 ```cpp
 /* Register queue with linker set */
-REGISTER_QUEUE("TELNET_Q", Queue<>);
+
+// Example.hpp
+class Example {
+private:
+    static Queue<std::string> ExampleQ;
+
+    /* declare friend */
+    DECLARE_QUEUE_FRIEND(Example, ExampleQ)
+};
+
+/* register Q to be used by Example */
+REGISTER_PRIVATE_QUEUE(Example, ExampleQ, "ExampleQ")
+
+// Example.cpp
+Queue<std::string> Example::ExampleQ;
 ```
 
 ---

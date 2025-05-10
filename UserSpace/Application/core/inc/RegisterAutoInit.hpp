@@ -1,5 +1,5 @@
 /******************************************************************************
- *  @file       AutoInit.cpp
+ *  @file       RegisterAutoInit.hpp
  *  @brief      Implements auto initializer registeration linkerset
  *
  *  @copyright  Copyright (c) 2025 Kishwar Kumar
@@ -16,8 +16,8 @@
  *  @note       This code is not open source. Unauthorized use is not permitted.
  ******************************************************************************/
 
- #ifndef _AUTOINIT_HPP_
- #define _AUTOINIT_HPP_
+ #ifndef _REGISTER_AUTOINIT_HPP_
+ #define _REGISTER_AUTOINIT_HPP_
  
  using InitFunc = void (*)();
  
@@ -31,4 +31,4 @@
      }                                                                                          \
      static InitFunc __init_##ClassName INIT_SECTION USED_ATTR = __##ClassName##_initCaller;    \
  
- #endif // _AUTOINIT_HPP_
+ #endif // _REGISTER_AUTOINIT_HPP_

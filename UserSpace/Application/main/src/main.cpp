@@ -16,8 +16,7 @@
  *  @note       This code is not open source. Unauthorized use is not permitted.
  ******************************************************************************/
 
-#include "AutoInit.hpp"
-
+#include "RegisterAutoInit.hpp"
 #include <thread>
 
 extern InitFunc __start_init_calls[];
@@ -33,7 +32,7 @@ int main() {
     try {
         callAllInitializers();  // ⚡ automatically initializes CLI, Logging, etc.
         while (true) {
-            std::this_thread::sleep_for(std::chrono::seconds(30));
+            std::this_thread::sleep_for(std::chrono::seconds(300));
         }
     } catch (const std::exception& e) {
     }
