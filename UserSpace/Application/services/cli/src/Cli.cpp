@@ -26,22 +26,20 @@ extern const CliCommand __stop_cli_cmds[];
 
 Queue<std::string> CLI::cliQ;
 
-CLI::CLI() : TelnetServer(PORT),
-             queue_(std::make_unique<Queue<std::string>>()) {
+CLI::CLI() : TelnetServer(PORT) {
 }
 
 void CLI::write()
 {
     while(true) {
-        std::string val = queue_->receive();
-        sockWrite(val);
+        sockWrite(cliQ.receive());
     }
 }
 
 void CLI::read()
 {
     while(true) {
-        queue_->send("CLI>");
+        cliQ.send("CLI>");
         std::string val = sockRead('\n');
         executeCommand(val);
     }
@@ -83,9 +81,9 @@ Codes CLI::executeCommand(const std::string& input) {
                 std::string outData;
                 ret = c->read(outData);
                 if(Codes::CODE_NO_ERROR == ret) {
-                    queue_->send("\r\n");
-                    queue_->send(outData);
-                    queue_->send("\r\n");
+                    cliQ.send("\r\n");
+                    cliQ.send(outData);
+                    cliQ.send("\r\n");
                     break;
                 }
             } else {
@@ -95,8 +93,8 @@ Codes CLI::executeCommand(const std::string& input) {
             }
         }
     }
-    queue_->send(errCodeStr(ret));
-    queue_->send("\r\n");
+    cliQ.send(errCodeStr(ret));
+    cliQ.send("\r\n");
     return ret;
 }
 

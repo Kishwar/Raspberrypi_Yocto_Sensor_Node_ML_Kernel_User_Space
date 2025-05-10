@@ -38,11 +38,8 @@ public:
 
     void write() override;
     void read() override;
-
-    //static Queue<std::string> cliQ;
 private:
     static constexpr uint16_t PORT = 23;
-    std::unique_ptr<Queue<std::string>> queue_;
 
     CLI();
     ~CLI() = default;

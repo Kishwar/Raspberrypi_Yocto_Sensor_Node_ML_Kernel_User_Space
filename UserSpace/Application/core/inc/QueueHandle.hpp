@@ -31,11 +31,9 @@ extern QueueHandle __stop_queue_registry[];
 
 #define QUEUE_SECTION __attribute__((section(".queue_registry"), used))
 
-// Put this in the class definition (e.g., in `Cli.hpp`)
 #define DECLARE_QUEUE_FRIEND(CLASSNAME, MEMBER) \
     friend struct CLASSNAME##_##MEMBER##_Registrar;
 
-// Put this in the .cpp file after defining the static member
 #define REGISTER_PRIVATE_QUEUE(CLASSNAME, MEMBER, NAMESTR)                  \
     struct CLASSNAME##_##MEMBER##_Registrar {                               \
         static QueueHandle handle;                                          \
