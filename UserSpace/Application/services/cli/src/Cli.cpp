@@ -24,6 +24,8 @@
 extern const CliCommand __start_cli_cmds[];
 extern const CliCommand __stop_cli_cmds[];
 
+Queue<std::string> CLI::cliQ;
+
 CLI::CLI() : TelnetServer(PORT),
              queue_(std::make_unique<Queue<std::string>>()) {
 }

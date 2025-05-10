@@ -24,6 +24,7 @@
 #include "AutoInit.hpp"
 #include "CliCommand.hpp"
 #include "Queue.hpp"
+#include "QueueHandle.hpp"
 
 #include <vector>
 #include <string>
@@ -37,6 +38,8 @@ public:
 
     void write() override;
     void read() override;
+
+    //static Queue<std::string> cliQ;
 private:
     static constexpr uint16_t PORT = 23;
     std::unique_ptr<Queue<std::string>> queue_;
@@ -47,9 +50,17 @@ private:
     std::vector<std::string> tokenize(const std::string& input);
     Codes executeCommand(const std::string& input);
     std::string errCodeStr(Codes code);
+
+    static Queue<std::string> cliQ;
+
+    // Declare friend
+    DECLARE_QUEUE_FRIEND(CLI, cliQ)  // Grant access to registration struct
 };
 
-/* register class to be auto-activated at startup (linkerset) */
+/* register class to be auto-activated at startup with linkerset */
 REGISTER_AUTO_INIT(CLI)
+
+/* register Q to be used by CLI */
+REGISTER_PRIVATE_QUEUE(CLI, cliQ, "CLIQ")
 
 #endif  // _CLI_HPP_
