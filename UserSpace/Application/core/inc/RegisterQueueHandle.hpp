@@ -1,5 +1,5 @@
 /******************************************************************************
- *  @file       QueueHandle.hpp
+ *  @file       RegisterQueueHandle.hpp
  *  @brief      Implements Queue registeration linkerset
  *
  *  @copyright  Copyright (c) 2025 Kishwar Kumar
@@ -16,8 +16,8 @@
  *  @note       This code is not open source. Unauthorized use is not permitted.
  ******************************************************************************/
 
-#ifndef _QUEUE_HANDLE_HPP_
-#define _QUEUE_HANDLE_HPP_
+#ifndef _REGISTER_QUEUE_HANDLE_HPP_
+#define _REGISTER_QUEUE_HANDLE_HPP_
 
 #include <string>
 
@@ -49,4 +49,4 @@ inline QueueHandle* findQueueByName(const std::string& name) {
     return nullptr;
 }
 
-#endif  // _QUEUE_HANDLE_HPP_
+#endif  // _REGISTER_QUEUE_HANDLE_HPP_

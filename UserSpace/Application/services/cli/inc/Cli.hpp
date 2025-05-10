@@ -21,10 +21,10 @@
 
 #include "ErrorCodes.hpp"
 #include "TelnetServer.hpp"
-#include "AutoInit.hpp"
-#include "CliCommand.hpp"
 #include "Queue.hpp"
-#include "QueueHandle.hpp"
+#include "RegisterAutoInit.hpp"
+#include "RegisterCliCommand.hpp"
+#include "RegisterQueueHandle.hpp"
 
 #include <vector>
 #include <string>
