@@ -17,7 +17,7 @@
  ******************************************************************************/
 
 #include "Cli.hpp"
-#include "Logging.hpp"
+#include "RegisterCliCommand.hpp"
 
 #include <sstream>
 
@@ -29,15 +29,13 @@ Queue<std::string> CLI::cliQ;
 CLI::CLI() : TelnetServer(PORT) {
 }
 
-void CLI::write()
-{
+void CLI::write() {
     while(true) {
         sockWrite(cliQ.receive());
     }
 }
 
-void CLI::read()
-{
+void CLI::read() {
     while(true) {
         cliQ.send("CLI>");
         std::string val = sockRead('\n');

@@ -1,6 +1,6 @@
 /******************************************************************************
- *  @file       LoggingIf.hpp
- *  @brief      Implements Logging service runs over telnet
+ *  @file       Help.cpp
+ *  @brief      Prints help for all registered CLI commands
  *
  *  @copyright  Copyright (c) 2025 Kishwar Kumar
  *              All rights reserved.
@@ -16,24 +16,26 @@
  *  @note       This code is not open source. Unauthorized use is not permitted.
  ******************************************************************************/
 
-#ifndef _LOGGING_IF_HPP
-#define _LOGGING_IF_HPP
+#include "Help.hpp"
 
-#include "ErrorCodes.hpp"
+#include <unordered_set>
 
-#include <string>
-#include <vector>
+extern CliCommand __start_cli_cmds[];
+extern CliCommand __stop_cli_cmds[];
 
-enum class Level {
-    FATAL, ERROR, INFO, DEBUG, MEDIUM, HIGH
-};
+Codes Help::printHelp(std::string& data) {
+    std::unordered_set<std::string> seen;
+    for(CliCommand* cmd = __start_cli_cmds; cmd < __stop_cli_cmds; ++cmd) {
+        if (seen.insert(cmd->name).second) {
+            std::string val;
+            cmd->help(val);
+            data += "> " + val + "\r\n";
+        }
+    }
+    return Codes::CODE_NO_ERROR;
+}
 
-class LoggingIf {
-public:
-    virtual void log(const Level level, const std::string& content) = 0;
-    virtual Codes setLevel(const std::vector<std::string>& args) = 0;
-    virtual Codes getLevel(std::string& data) = 0;
-    virtual Codes help(std::string& data) = 0;
-};
-
-#endif  // _LOGGING_IF_HPP
+Codes Help::help(std::string& data) {
+    data = "\"help\"";
+    return Codes::CODE_NO_ERROR;
+}

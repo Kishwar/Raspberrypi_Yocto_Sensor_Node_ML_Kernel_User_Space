@@ -36,7 +36,6 @@
 
 class Logging : public LoggingIf, private TelnetServer {
 public:
-
     static Logging& getInstance() {
         static Logging instance;
         return instance;
@@ -45,6 +44,7 @@ public:
     void log(const Level level, const std::string& content) override;
     Codes setLevel(const std::vector<std::string>& args) override;
     Codes getLevel(std::string& data) override;
+    Codes help(std::string& data) override;
 
     void write() override;
     void read() override;
@@ -80,7 +80,7 @@ private:
     } while (0)
 
 /* register CLI command with linkerset */
-REGISTER_CLI_COMMAND_BOTH("loglevel", Logging, setLevel, getLevel);
+REGISTER_CLI_COMMAND_FULL("loglevel", Logging, setLevel, getLevel, help);
 
 /* register class to be auto-activated at startup (linkerset) */
 REGISTER_AUTO_INIT(Logging)

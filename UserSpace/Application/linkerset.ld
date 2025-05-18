@@ -22,7 +22,7 @@
 SECTIONS {
     .cli_cmds : ALIGN(4) {
         __start_cli_cmds = .;
-        KEEP(*(.cli_cmds))
+        KEEP(*(SORT(.cli_cmds)))
         __stop_cli_cmds = .;
     }
 
