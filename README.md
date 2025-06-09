@@ -30,7 +30,7 @@ This project uses a unified messaging abstraction where services send messages t
 
 ## 🌐 Protobuf Integration
 
-This project uses [Protocol Buffers](https://developers.google.com/protocol-buffers) for message serialization between local and remote services. If a local queue is not found for a message, the system serializes it via Protobuf and sends it to a remote responder using UDP.
+This project uses [Protocol Buffers](https://developers.google.com/protocol-buffers) for message serialization between local and remote services. If a local queue is not found for a message, the system serializes it via Protobuf and sends it to a remote responder using **gRPC**.
 
 📂 Protobuf: [`protobuf/`](UserSpace/Application/protobuf)
 
@@ -40,11 +40,11 @@ This project uses [Protocol Buffers](https://developers.google.com/protocol-buff
 
 This project integrates [gRPC](https://grpc.io/) as a fallback communication mechanism for service messages when no local queue is found. Messages are serialized using **Protocol Buffers**, and forwarded to a remote server over **gRPC** for further handling or execution.
 
-Local services use `Queue<T>` with automatic discovery via **Linkersets**
+- Local services use `Queue<T>` with automatic discovery via **Linkersets**
 
-When a queue is not available locally, the message is serialized using **Protobuf**
+- When a queue is not available locally, the message is serialized using **Protobuf**
 
-The serialized message is sent over **gRPC** to a remote server, which deserializes and handles it
+- The serialized message is sent over **gRPC** to a remote server, which deserializes and handles it
 
 📂 Protobuf definitions used for gRPC communication: [`protobuf/`](UserSpace/Application/protobuf)
 
