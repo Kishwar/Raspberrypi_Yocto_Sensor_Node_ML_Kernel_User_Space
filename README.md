@@ -11,13 +11,21 @@ This repository provides a modular embedded system targeting Raspberry Pi, combi
 
 ## 🧠 Application Architecture
 
-![Application Overview](Application_Overview.jpg)
+![Application Overview](Application_Overview_UserSpace.jpg)
 
 This image outlines the architecture of the user-space application:
 - Data flows from kernel drivers into queues
 - Services (CLI, Telnet, Logging, etc.) communicate via queues
 - ML model is integrated as a self-contained module
 - All components register dynamically via **linker sets**
+
+---
+
+## 🔁 Queue Overview
+
+The following diagram illustrates the integration of local and remote message queues using a unified messaging abstraction. It demonstrates how services send messages to `Queue<T>` objects discovered via Linkersets, with automatic fallback to remote servers using Protobuf serialization and UDP if no local handler is found.
+
+![Queue Overview](Queue_Overview_UserSpace.jpg)
 
 ---
 
