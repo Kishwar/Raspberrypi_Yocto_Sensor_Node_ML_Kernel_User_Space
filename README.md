@@ -29,7 +29,7 @@ The following diagram illustrates the integration of local and remote message qu
 
 ---
 
-### 🌐 Protobuf Integration
+## 🌐 Protobuf Integration
 
 This project uses [Protocol Buffers](https://developers.google.com/protocol-buffers) for message serialization between local and remote services. If a local queue is not found for a message, the system serializes it via Protobuf and sends it to a remote responder using UDP.
 
