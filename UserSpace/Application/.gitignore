@@ -21,7 +21,7 @@ application
 *.swp
 *.swo
 *.DS_Store
-.vscode/
+#.vscode/
 .idea/
 
 # User-specific files
