@@ -21,7 +21,7 @@ This image outlines the architecture of the user-space application:
 
 ---
 
-## 🔁 Queue Overview
+## 🛰️ Queue Overview
 
 The following diagram illustrates the integration of local and remote message queues using a unified messaging abstraction. It demonstrates how services send messages to `Queue<T>` objects discovered via Linkersets, with automatic fallback to remote servers using Protobuf serialization and UDP if no local handler is found.
 
