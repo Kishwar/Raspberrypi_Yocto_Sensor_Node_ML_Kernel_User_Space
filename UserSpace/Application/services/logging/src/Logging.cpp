@@ -127,11 +127,16 @@ Codes Logging::getLevel(std::string& data) {
     return Codes::CODE_NO_ERROR;
 }
 
+Codes Logging::help(std::string &data)
+{
+    data = "\"loglevel\" (\"FATAL\", \"ERROR\", \"HIGH\", \"MEDIUM\", \"INFO\", \"DEBUG\")";
+    return Codes::CODE_NO_ERROR;
+}
+
 void Logging::write() {
     while(true) {
         auto message = queue_->receive();
-        std::string val = message.extractPayload();
-        sockWrite(val);
+        sockWrite(message.extractPayload());
     }
 }
 

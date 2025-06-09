@@ -17,7 +17,10 @@
  ******************************************************************************/
 
 #include "RegisterAutoInit.hpp"
+#include "RegisterQueueHandle.hpp"
+
 #include <thread>
+#include <iostream>
 
 extern InitFunc __start_init_calls[];
 extern InitFunc __stop_init_calls[];
@@ -32,6 +35,10 @@ int main() {
     try {
         callAllInitializers();  // ⚡ automatically initializes CLI, Logging, etc.
         while (true) {
+            QueueHandle* q1 = findQueueByName("CLIQ");
+            QueueHandle* q2 = findQueueByName("CLQ");
+
+            std::cout << "Queue pointer -> Q1: " << q1 << "\nQueue pointer -> Q2: " << q2 << std::endl; 
             std::this_thread::sleep_for(std::chrono::seconds(300));
         }
     } catch (const std::exception& e) {
