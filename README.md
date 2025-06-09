@@ -22,8 +22,7 @@ This image outlines the architecture of the user-space application:
 ---
 
 ## 🛰️ Queue Overview
-
-The following diagram illustrates the integration of local and remote message queues using a unified messaging abstraction. It demonstrates how services send messages to `Queue<T>` objects discovered via Linkersets, with automatic fallback to remote servers using Protobuf serialization and UDP if no local handler is found.
+This project uses a unified messaging abstraction where services send messages to `Queue<T>` discovered via Linkersets. If a local handler `Queue<T>` is not found, the system automatically falls back to using **Protobuf serialization and gRPC** to communicate with a remote server.
 
 ![Queue Overview](Queue_Overview_UserSpace.jpg)
 
@@ -34,6 +33,22 @@ The following diagram illustrates the integration of local and remote message qu
 This project uses [Protocol Buffers](https://developers.google.com/protocol-buffers) for message serialization between local and remote services. If a local queue is not found for a message, the system serializes it via Protobuf and sends it to a remote responder using UDP.
 
 📂 Protobuf: [`protobuf/`](UserSpace/Application/protobuf)
+
+---
+
+## 🔗 gRPC Integration
+
+This project integrates [gRPC](https://grpc.io/) as a fallback communication mechanism for service messages when no local queue is found. Messages are serialized using **Protocol Buffers**, and forwarded to a remote server over **gRPC** for further handling or execution.
+
+Local services use `Queue<T>` with automatic discovery via **Linkersets**
+
+When a queue is not available locally, the message is serialized using **Protobuf**
+
+The serialized message is sent over **gRPC** to a remote server, which deserializes and handles it
+
+📂 Protobuf definitions used for gRPC communication: [`protobuf/`](UserSpace/Application/protobuf)
+
+This design allows seamless scaling from single-device embedded systems to distributed architectures involving multiple remote processing nodes.
 
 ---
 
